@@ -296,8 +296,8 @@ var HBPInstance = /** @class */ (function () {
     return HBPInstance;
 }());
 exports.HBPInstance = HBPInstance;
-var createHasuraBackendPlus = function (options) {
-    return new HBPInstance(options);
+var createHasuraBackendPlus = function (options, routerSettings, app_id) {
+    return new HBPInstance(options, routerSettings, app_id);
 };
 exports.createHasuraBackendPlus = createHasuraBackendPlus;
 //# sourceMappingURL=index.js.map

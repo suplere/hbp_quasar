@@ -44,4 +44,4 @@ export declare class HBPInstance {
         error: any;
     }>;
 }
-export declare const createHasuraBackendPlus: (options: any) => HBPInstance;
+export declare const createHasuraBackendPlus: (options: UserConfig, routerSettings?: HBPRouterSettings, app_id?: string) => HBPInstance;
