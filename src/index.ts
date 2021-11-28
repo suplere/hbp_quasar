@@ -208,6 +208,6 @@ export class HBPInstance {
   }
 }
 
-export const createHasuraBackendPlus = (options) => {
-  return new HBPInstance(options);
+export const createHasuraBackendPlus = (options: UserConfig, routerSettings?: HBPRouterSettings, app_id?: string) => {
+  return new HBPInstance(options,  routerSettings, app_id);
 };

@@ -1,21 +1,4 @@
-# TypeScript Package Starter
+# HBP wrapper for using in Quasar
 
-TypeScript boilerplate for NPM or Github Packages
+Impelent NHOST SDK to Quasar Framework
 
-## Build project
-
-```sh
-npm run build
-```
-
-## Test pacakge
-
-```sh
-npm test
-```
-
-## Deploy package
-
-```sh
-npm run deploy
-```
