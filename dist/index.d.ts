@@ -9,10 +9,6 @@ export interface HBPRouterSettings {
     notAuthorizedPath?: string;
     afterLoginPath?: string;
 }
-export interface AuthState {
-    claims: JWTHasuraClaims | null;
-    state: boolean;
-}
 export declare class HBPInstance {
     baseURL: string;
     auth: Auth;
@@ -29,7 +25,7 @@ export declare class HBPInstance {
     afterLoginPath: string;
     constructor(options: UserConfig, routerSettings?: HBPRouterSettings);
     hasRole: (role: string) => boolean;
-    handleOnAuthStateChanged: (status: boolean, store: any) => Promise<AuthState>;
+    handleOnAuthStateChanged: (status: boolean) => Promise<boolean>;
     routerInitApp: (to: any, from: any, next: any) => Promise<void>;
     routeAuthorizeGuard: (router: any, store: any) => (to: any, from: any, next: any) => void;
     requestPasswordChange(email: any): Promise<void>;

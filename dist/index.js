@@ -68,7 +68,7 @@ var HBPInstance = /** @class */ (function () {
                 return false;
             return _this.claims["x-hasura-allowed-roles"].includes(role);
         };
-        this.handleOnAuthStateChanged = function (status, store) { return __awaiter(_this, void 0, void 0, function () {
+        this.handleOnAuthStateChanged = function (status) { return __awaiter(_this, void 0, void 0, function () {
             var token;
             return __generator(this, function (_a) {
                 this.authenticated = status;
@@ -87,10 +87,7 @@ var HBPInstance = /** @class */ (function () {
                     // store.commit("app/setAuthData", null);
                     // store.dispatch("app/getUserSettings", null);
                 }
-                return [2 /*return*/, {
-                        claims: this.claims,
-                        state: status
-                    }];
+                return [2 /*return*/, status];
             });
         }); };
         this.routerInitApp = function (to, from, next) { return __awaiter(_this, void 0, void 0, function () {

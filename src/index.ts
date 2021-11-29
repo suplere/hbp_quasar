@@ -21,12 +21,6 @@ export interface HBPRouterSettings {
   afterLoginPath?: string;  
 }
 
-export interface AuthState {
-  claims: JWTHasuraClaims | null;
-  state: boolean;
-}
-
-
 export class HBPInstance {
   baseURL: string;
   auth: Auth;
@@ -84,9 +78,8 @@ export class HBPInstance {
   };
 
   handleOnAuthStateChanged = async (
-    status: boolean,
-    store
-  ): Promise<AuthState> => {
+    status: boolean
+  ): Promise<boolean> => {
     this.authenticated = status;
     // store.commit("app/isAuthenticated", status);
     if (status) {
@@ -102,10 +95,7 @@ export class HBPInstance {
       // store.commit("app/setAuthData", null);
       // store.dispatch("app/getUserSettings", null);
     }
-    return {
-      claims: this.claims,
-      state: status
-    }
+    return status
   };
 
   routerInitApp = async (to, from, next) => {
