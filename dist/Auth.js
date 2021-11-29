@@ -103,30 +103,31 @@ var Auth = /** @class */ (function () {
     Auth.prototype.register = function (_a) {
         var email = _a.email, password = _a.password, _b = _a.options, options = _b === void 0 ? {} : _b;
         return __awaiter(this, void 0, void 0, function () {
-            var userData, defaultRole, allowedRoles, registerOptions, res, error_1;
+            var userData, defaultRole, allowedRoles, registerOptions, data, res, error_1;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
                         userData = options.userData, defaultRole = options.defaultRole, allowedRoles = options.allowedRoles;
-                        if (this.appId) {
-                            userData.app_id = this.appId;
-                        }
                         registerOptions = defaultRole || allowedRoles
                             ? {
                                 default_role: defaultRole,
                                 allowed_roles: allowedRoles,
                             }
                             : undefined;
+                        data = {
+                            email: email,
+                            password: password,
+                            cookie: this.useCookies,
+                            user_data: userData,
+                            register_options: registerOptions,
+                        };
+                        if (this.appId) {
+                            data['app_id'] = this.appId;
+                        }
                         _c.label = 1;
                     case 1:
                         _c.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, this.httpClient.post("/register", {
-                                email: email,
-                                password: password,
-                                cookie: this.useCookies,
-                                user_data: userData,
-                                register_options: registerOptions,
-                            })];
+                        return [4 /*yield*/, this.httpClient.post("/register", data)];
                     case 2:
                         res = _c.sent();
                         return [3 /*break*/, 4];

@@ -146,8 +146,8 @@ var HBPInstance = /** @class */ (function () {
         }; };
         this.appId = options.appId ? options.appId : null;
         this.baseURL = options.baseURL;
-        console.log("APPID", options.appId, this.appId);
-        console.log("BASEURL", this.baseURL);
+        // console.log("APPID", options.appId, this.appId)
+        // console.log("BASEURL", this.baseURL)
         var nhost = new NhostClient_1.default({
             baseURL: this.baseURL,
             useCookies: false,

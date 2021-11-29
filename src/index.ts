@@ -43,8 +43,8 @@ export class HBPInstance {
   ) {
     this.appId = options.appId ? options.appId : null;
     this.baseURL = options.baseURL
-    console.log("APPID", options.appId, this.appId)
-    console.log("BASEURL", this.baseURL)
+    // console.log("APPID", options.appId, this.appId)
+    // console.log("BASEURL", this.baseURL)
     const nhost = new NhostClient({
       baseURL: this.baseURL,
       useCookies: false,
