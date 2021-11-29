@@ -1,7 +1,6 @@
-import { UserConfig } from "nhost-js-sdk";
-import Auth from "nhost-js-sdk/dist/Auth";
-import Storage from "nhost-js-sdk/dist/Storage";
-import { JWTHasuraClaims } from "nhost-js-sdk/dist/types";
+import Auth from "./Auth";
+import Storage from "./Storage";
+import { UserConfig, JWTHasuraClaims } from "./types";
 export interface HBPRouterSettings {
     notAuthorized?: () => void;
     notAuthenticated?: () => void;
@@ -11,6 +10,7 @@ export interface HBPRouterSettings {
     afterLoginPath?: string;
 }
 export declare class HBPInstance {
+    baseURL: string;
     auth: Auth;
     app_id: string;
     storage: Storage;
@@ -23,7 +23,7 @@ export declare class HBPInstance {
     registerPath: string;
     notAuthorizedPath: string;
     afterLoginPath: string;
-    constructor(options: UserConfig, routerSettings?: HBPRouterSettings, app_id?: string);
+    constructor(options: UserConfig, routerSettings?: HBPRouterSettings);
     hasRole: (role: string) => boolean;
     handleOnAuthStateChanged: (status: boolean, store: any) => Promise<void>;
     routerInitApp: (to: any, from: any, next: any) => Promise<void>;

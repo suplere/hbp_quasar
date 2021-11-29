@@ -1,10 +1,8 @@
 import decode from "jwt-decode";
-import { createClient, NhostClient, UserConfig } from "nhost-js-sdk";
-import Auth from "nhost-js-sdk/dist/Auth";
-import Storage from "nhost-js-sdk/dist/Storage";
-import { JWTHasuraClaims, UserCredentials } from "nhost-js-sdk/dist/types";
-// import { Notify } from "quasar";
-// import { restartWebsockets } from 'src/services/apollo/create-apollo-client'
+import Auth from "./Auth";
+import Storage from "./Storage";
+import NhostClient from "./NhostClient";
+import { UserConfig, JWTHasuraClaims, UserCredentials } from "./types";
 
 function notAuthorized(): void {
     window.alert('You dont autorize to view this page.')
@@ -25,6 +23,7 @@ export interface HBPRouterSettings {
 
 
 export class HBPInstance {
+  baseURL: string;
   auth: Auth;
   app_id: string;
   storage: Storage;
@@ -40,10 +39,11 @@ export class HBPInstance {
 
   constructor(
     options: UserConfig,
-    routerSettings: HBPRouterSettings = {},
-    app_id: string = null
+    routerSettings: HBPRouterSettings = {}
   ) {
-    const nhost = createClient({
+    this.app_id = options.appId ? options.appId : null;
+    this.baseURL = this.app_id ? `${options.baseURL}/custom` : options.baseURL;
+    const nhost = new NhostClient({
       baseURL: options.baseURL,
       useCookies: false,
       refreshIntervalTime: (options.refreshIntervalTime || 600) * 1000,
@@ -59,7 +59,6 @@ export class HBPInstance {
     this.notAuthorized = routerSettings.notAuthorized
       ? routerSettings.notAuthorized
       : notAuthorized;
-    this.app_id = app_id;
     this.loginPath = routerSettings.loginPath
       ? routerSettings.loginPath
       : "/auth/login";
@@ -209,5 +208,5 @@ export class HBPInstance {
 }
 
 export const createHasuraBackendPlus = (options: UserConfig, routerSettings?: HBPRouterSettings, app_id?: string) => {
-  return new HBPInstance(options,  routerSettings, app_id);
+  return new HBPInstance(options,  routerSettings);
 };

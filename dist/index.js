@@ -52,9 +52,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createHasuraBackendPlus = exports.HBPInstance = void 0;
 var jwt_decode_1 = __importDefault(require("jwt-decode"));
-var nhost_js_sdk_1 = require("nhost-js-sdk");
-// import { Notify } from "quasar";
-// import { restartWebsockets } from 'src/services/apollo/create-apollo-client'
+var NhostClient_1 = __importDefault(require("./NhostClient"));
 function notAuthorized() {
     window.alert('You dont autorize to view this page.');
 }
@@ -62,10 +60,9 @@ function notAuthenticated() {
     window.alert("Only for authenticated users!");
 }
 var HBPInstance = /** @class */ (function () {
-    function HBPInstance(options, routerSettings, app_id) {
+    function HBPInstance(options, routerSettings) {
         var _this = this;
         if (routerSettings === void 0) { routerSettings = {}; }
-        if (app_id === void 0) { app_id = null; }
         this.hasRole = function (role) {
             if (!_this.token)
                 return false;
@@ -147,7 +144,9 @@ var HBPInstance = /** @class */ (function () {
                 next();
             }
         }; };
-        var nhost = (0, nhost_js_sdk_1.createClient)({
+        this.app_id = options.appId ? options.appId : null;
+        this.baseURL = this.app_id ? options.baseURL + "/custom" : options.baseURL;
+        var nhost = new NhostClient_1.default({
             baseURL: options.baseURL,
             useCookies: false,
             refreshIntervalTime: (options.refreshIntervalTime || 600) * 1000,
@@ -163,7 +162,6 @@ var HBPInstance = /** @class */ (function () {
         this.notAuthorized = routerSettings.notAuthorized
             ? routerSettings.notAuthorized
             : notAuthorized;
-        this.app_id = app_id;
         this.loginPath = routerSettings.loginPath
             ? routerSettings.loginPath
             : "/auth/login";
@@ -297,7 +295,7 @@ var HBPInstance = /** @class */ (function () {
 }());
 exports.HBPInstance = HBPInstance;
 var createHasuraBackendPlus = function (options, routerSettings, app_id) {
-    return new HBPInstance(options, routerSettings, app_id);
+    return new HBPInstance(options, routerSettings);
 };
 exports.createHasuraBackendPlus = createHasuraBackendPlus;
 //# sourceMappingURL=index.js.map
