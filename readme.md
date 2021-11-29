@@ -32,6 +32,7 @@ export const hbp = createHasuraBackendPlus(
   {
     baseURL: HBP_URL,
     refreshInSeconds: 600,
+    appId: APP_ID
   },
   {
     loginPath: "/auth/login",
@@ -40,8 +41,7 @@ export const hbp = createHasuraBackendPlus(
     notAuthorizedPath:"/",
     notAuthorized: notAuthorizedNotification,
     notAuthenticated: notAuthenticatedNotification
-  },
-  APP_ID
+  }
 );
 
 export default boot(({ router, store, app }) => {

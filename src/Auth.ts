@@ -113,10 +113,6 @@ export default class Auth {
   }> {
     const { userData, defaultRole, allowedRoles } = options;
 
-    if (this.appId) {
-      userData.app_id = this.appId
-    }
-
     const registerOptions =
       defaultRole || allowedRoles
         ? {
@@ -125,15 +121,21 @@ export default class Auth {
           }
         : undefined;
 
+    const data = {
+      email,
+      password,
+      cookie: this.useCookies,
+      user_data: userData,
+      register_options: registerOptions,
+    };
+
+    if (this.appId) {
+      data['app_id'] = this.appId;
+    }
+
     let res;
     try {
-      res = await this.httpClient.post("/register", {
-        email,
-        password,
-        cookie: this.useCookies,
-        user_data: userData,
-        register_options: registerOptions,
-      });
+      res = await this.httpClient.post("/register", data);
     } catch (error) {
       throw error;
     }
