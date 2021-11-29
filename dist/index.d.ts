@@ -12,7 +12,7 @@ export interface HBPRouterSettings {
 export declare class HBPInstance {
     baseURL: string;
     auth: Auth;
-    app_id: string;
+    appId: string;
     storage: Storage;
     claims: JWTHasuraClaims;
     token: string;
@@ -44,4 +44,4 @@ export declare class HBPInstance {
         error: any;
     }>;
 }
-export declare const createHasuraBackendPlus: (options: UserConfig, routerSettings?: HBPRouterSettings, app_id?: string) => HBPInstance;
+export declare const createHasuraBackendPlus: (options: UserConfig, routerSettings?: HBPRouterSettings) => HBPInstance;

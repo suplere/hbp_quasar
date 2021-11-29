@@ -3,6 +3,7 @@ import NhostStorage from "./Storage";
 import * as types from "./types";
 export default class NhostClient {
     protected baseURL: string;
+    private appId;
     protected useCookies: boolean;
     private refreshIntervalTime;
     private clientStorage;

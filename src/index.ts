@@ -25,7 +25,7 @@ export interface HBPRouterSettings {
 export class HBPInstance {
   baseURL: string;
   auth: Auth;
-  app_id: string;
+  appId: string;
   storage: Storage;
   claims: JWTHasuraClaims;
   token: string;
@@ -41,12 +41,15 @@ export class HBPInstance {
     options: UserConfig,
     routerSettings: HBPRouterSettings = {}
   ) {
-    this.app_id = options.appId ? options.appId : null;
-    this.baseURL = this.app_id ? `${options.baseURL}/custom` : options.baseURL;
+    this.appId = options.appId ? options.appId : null;
+    this.baseURL = options.baseURL
+    console.log("APPID", options.appId, this.appId)
+    console.log("BASEURL", this.baseURL)
     const nhost = new NhostClient({
-      baseURL: options.baseURL,
+      baseURL: this.baseURL,
       useCookies: false,
       refreshIntervalTime: (options.refreshIntervalTime || 600) * 1000,
+      appId: this.appId
     });
     this.auth = nhost.auth;
     this.storage = nhost.storage;
@@ -170,7 +173,6 @@ export class HBPInstance {
     const userData = {
         ...additionalFields
     }
-    if (this.app_id) userData['app_id'] = this.app_id
     const options = {
       userData,
     };
@@ -207,6 +209,6 @@ export class HBPInstance {
   }
 }
 
-export const createHasuraBackendPlus = (options: UserConfig, routerSettings?: HBPRouterSettings, app_id?: string) => {
+export const createHasuraBackendPlus = (options: UserConfig, routerSettings?: HBPRouterSettings) => {
   return new HBPInstance(options,  routerSettings);
 };

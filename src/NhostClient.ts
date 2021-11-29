@@ -5,6 +5,7 @@ import * as types from "./types";
 
 export default class NhostClient {
   protected baseURL: string;
+  private appId: string | null;
   protected useCookies: boolean;
   private refreshIntervalTime: number | null;
   private clientStorage: types.ClientStorage;
@@ -21,6 +22,7 @@ export default class NhostClient {
       throw "Please specify a baseURL. More information at https://docs.nhost.io/libraries/nhost-js-sdk#setup.";
 
     this.baseURL = config.baseURL;
+    this.appId = config.appId;
     this.ssr = config.ssr ?? typeof window === "undefined";
     this.useCookies = config.useCookies ?? false;
     this.autoLogin = config.autoLogin ?? true;
@@ -39,13 +41,14 @@ export default class NhostClient {
 
     this.auth = new NhostAuth(
       {
-        baseURL: this.baseURL,
+        baseURL: this.appId ? `${this.baseURL}/custom` : this.baseURL,
         useCookies: this.useCookies,
         refreshIntervalTime: this.refreshIntervalTime,
         clientStorage: this.clientStorage,
         clientStorageType: this.clientStorageType,
         ssr: this.ssr,
         autoLogin: this.autoLogin,
+        appId: this.appId
       },
       this.session
     );

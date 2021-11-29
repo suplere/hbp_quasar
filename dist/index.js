@@ -144,12 +144,15 @@ var HBPInstance = /** @class */ (function () {
                 next();
             }
         }; };
-        this.app_id = options.appId ? options.appId : null;
-        this.baseURL = this.app_id ? options.baseURL + "/custom" : options.baseURL;
+        this.appId = options.appId ? options.appId : null;
+        this.baseURL = options.baseURL;
+        console.log("APPID", options.appId, this.appId);
+        console.log("BASEURL", this.baseURL);
         var nhost = new NhostClient_1.default({
-            baseURL: options.baseURL,
+            baseURL: this.baseURL,
             useCookies: false,
             refreshIntervalTime: (options.refreshIntervalTime || 600) * 1000,
+            appId: this.appId
         });
         this.auth = nhost.auth;
         this.storage = nhost.storage;
@@ -237,8 +240,6 @@ var HBPInstance = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         userData = __assign({}, additionalFields);
-                        if (this.app_id)
-                            userData['app_id'] = this.app_id;
                         options = {
                             userData: userData,
                         };
@@ -294,7 +295,7 @@ var HBPInstance = /** @class */ (function () {
     return HBPInstance;
 }());
 exports.HBPInstance = HBPInstance;
-var createHasuraBackendPlus = function (options, routerSettings, app_id) {
+var createHasuraBackendPlus = function (options, routerSettings) {
     return new HBPInstance(options, routerSettings);
 };
 exports.createHasuraBackendPlus = createHasuraBackendPlus;
