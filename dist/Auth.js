@@ -727,6 +727,7 @@ var Auth = /** @class */ (function () {
                 clearInterval(this.refreshSleepCheckInterval);
                 this.currentSession.clearSession();
                 this._removeItem("nhostRefreshToken");
+                this.currentUser = null;
                 this.loading = false;
                 this.authStateChanged(false);
                 return [2 /*return*/];

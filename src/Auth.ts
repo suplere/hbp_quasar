@@ -620,6 +620,7 @@ export default class Auth {
 
     this.currentSession.clearSession();
     this._removeItem("nhostRefreshToken");
+    this.currentUser = null
 
     this.loading = false;
     this.authStateChanged(false);
