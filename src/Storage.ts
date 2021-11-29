@@ -12,10 +12,12 @@ export default class Storage {
   private httpClient: AxiosInstance;
   private useCookies: boolean;
   private currentSession: UserSession;
+  private appId: string | null;
 
   constructor(config: types.StorageConfig, session: UserSession) {
     this.currentSession = session;
     this.useCookies = config.useCookies;
+    this.appId = config.appId
 
     this.httpClient = axios.create({
       baseURL: config.baseURL,
@@ -116,12 +118,12 @@ export default class Storage {
     const file = new File([fileData], "untitled", { type: contentType });
 
     // create form data
-    let form_data = new FormData();
-    form_data.append("file", file);
-
+    let formData = new FormData();
+    formData.append("file", file);
+    
     const uploadRes = await this.httpClient.post(
       `/storage/o${path}`,
-      form_data,
+      formData,
       {
         headers: {
           "Content-Type": "multipart/form-data",

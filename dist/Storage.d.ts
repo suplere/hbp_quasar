@@ -4,6 +4,7 @@ export default class Storage {
     private httpClient;
     private useCookies;
     private currentSession;
+    private appId;
     constructor(config: types.StorageConfig, session: UserSession);
     private generateAuthorizationHeader;
     put(path: string, file: File, metadata?: object | null, onUploadProgress?: any | undefined): Promise<any>;

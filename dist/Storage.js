@@ -56,6 +56,7 @@ var Storage = /** @class */ (function () {
     function Storage(config, session) {
         this.currentSession = session;
         this.useCookies = config.useCookies;
+        this.appId = config.appId;
         this.httpClient = axios_1.default.create({
             baseURL: config.baseURL,
             timeout: 120 * 1000,
@@ -109,7 +110,7 @@ var Storage = /** @class */ (function () {
         if (metadata === void 0) { metadata = null; }
         if (onUploadProgress === void 0) { onUploadProgress = undefined; }
         return __awaiter(this, void 0, void 0, function () {
-            var fileData, contentType, isBase64, matches, middle, restData, file, form_data, uploadRes;
+            var fileData, contentType, isBase64, matches, middle, restData, file, formData, uploadRes;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -145,9 +146,9 @@ var Storage = /** @class */ (function () {
                             throw new Error("Unbale to generate file data");
                         }
                         file = new File([fileData], "untitled", { type: contentType });
-                        form_data = new FormData();
-                        form_data.append("file", file);
-                        return [4 /*yield*/, this.httpClient.post("/storage/o" + path, form_data, {
+                        formData = new FormData();
+                        formData.append("file", file);
+                        return [4 /*yield*/, this.httpClient.post("/storage/o" + path, formData, {
                                 headers: __assign({ "Content-Type": "multipart/form-data" }, this.generateAuthorizationHeader()),
                                 onUploadProgress: onUploadProgress,
                             })];

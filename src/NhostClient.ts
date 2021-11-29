@@ -56,7 +56,7 @@ export default class NhostClient {
 
     this.storage = new NhostStorage(
       {
-        baseURL: this.baseURL,
+        baseURL: this.appId ? `${this.baseURL}/custom` : this.baseURL,
         useCookies: this.useCookies,
       },
       this.session
