@@ -21,6 +21,11 @@ export interface HBPRouterSettings {
   afterLoginPath?: string;  
 }
 
+export interface AuthState {
+  claims: JWTHasuraClaims | null;
+  state: boolean;
+}
+
 
 export class HBPInstance {
   baseURL: string;
@@ -37,19 +42,16 @@ export class HBPInstance {
   notAuthorizedPath: string;
   afterLoginPath: string;
 
-  constructor(
-    options: UserConfig,
-    routerSettings: HBPRouterSettings = {}
-  ) {
+  constructor(options: UserConfig, routerSettings: HBPRouterSettings = {}) {
     this.appId = options.appId ? options.appId : null;
-    this.baseURL = options.baseURL
+    this.baseURL = options.baseURL;
     // console.log("APPID", options.appId, this.appId)
     // console.log("BASEURL", this.baseURL)
     const nhost = new NhostClient({
       baseURL: this.baseURL,
       useCookies: false,
       refreshIntervalTime: (options.refreshIntervalTime || 600) * 1000,
-      appId: this.appId
+      appId: this.appId,
     });
     this.auth = nhost.auth;
     this.storage = nhost.storage;
@@ -73,7 +75,7 @@ export class HBPInstance {
       : "/admin/home";
     this.afterLoginPath = routerSettings.afterLoginPath
       ? routerSettings.afterLoginPath
-      : "/admin/home";      
+      : "/admin/home";
   }
 
   hasRole = (role: string): boolean => {
@@ -81,21 +83,28 @@ export class HBPInstance {
     return this.claims["x-hasura-allowed-roles"].includes(role);
   };
 
-  handleOnAuthStateChanged = async (status: boolean, store) => {
+  handleOnAuthStateChanged = async (
+    status: boolean,
+    store
+  ): Promise<AuthState> => {
     this.authenticated = status;
-    store.commit("app/isAuthenticated", status);
+    // store.commit("app/isAuthenticated", status);
     if (status) {
       const token = this.auth.getJWTToken();
       this.token = token;
       this.claims = decode(token)["https://hasura.io/jwt/claims"];
-      store.commit("app/setAuthData", this.claims);
-      store.dispatch("app/getUserSettings", this.claims);
+      // store.commit("app/setAuthData", this.claims);
+      // store.dispatch("app/getUserSettings", this.claims);
       //
     } else {
       this.token = undefined;
       this.claims = undefined;
-      store.commit("app/setAuthData", null);
-      store.dispatch("app/getUserSettings", null);
+      // store.commit("app/setAuthData", null);
+      // store.dispatch("app/getUserSettings", null);
+    }
+    return {
+      claims: this.claims,
+      state: status
     }
   };
 
@@ -171,16 +180,16 @@ export class HBPInstance {
     let error;
     let data;
     const userData = {
-        ...additionalFields
-    }
+      ...additionalFields,
+    };
     const options = {
       userData,
     };
     const registerData: UserCredentials = {
-        email,
-        password,
-        options
-    }
+      email,
+      password,
+      options,
+    };
     try {
       error = undefined;
       data = await this.auth.register(registerData);

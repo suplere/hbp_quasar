@@ -72,22 +72,25 @@ var HBPInstance = /** @class */ (function () {
             var token;
             return __generator(this, function (_a) {
                 this.authenticated = status;
-                store.commit("app/isAuthenticated", status);
+                // store.commit("app/isAuthenticated", status);
                 if (status) {
                     token = this.auth.getJWTToken();
                     this.token = token;
                     this.claims = (0, jwt_decode_1.default)(token)["https://hasura.io/jwt/claims"];
-                    store.commit("app/setAuthData", this.claims);
-                    store.dispatch("app/getUserSettings", this.claims);
+                    // store.commit("app/setAuthData", this.claims);
+                    // store.dispatch("app/getUserSettings", this.claims);
                     //
                 }
                 else {
                     this.token = undefined;
                     this.claims = undefined;
-                    store.commit("app/setAuthData", null);
-                    store.dispatch("app/getUserSettings", null);
+                    // store.commit("app/setAuthData", null);
+                    // store.dispatch("app/getUserSettings", null);
                 }
-                return [2 /*return*/];
+                return [2 /*return*/, {
+                        claims: this.claims,
+                        state: status
+                    }];
             });
         }); };
         this.routerInitApp = function (to, from, next) { return __awaiter(_this, void 0, void 0, function () {
@@ -152,7 +155,7 @@ var HBPInstance = /** @class */ (function () {
             baseURL: this.baseURL,
             useCookies: false,
             refreshIntervalTime: (options.refreshIntervalTime || 600) * 1000,
-            appId: this.appId
+            appId: this.appId,
         });
         this.auth = nhost.auth;
         this.storage = nhost.storage;
@@ -246,7 +249,7 @@ var HBPInstance = /** @class */ (function () {
                         registerData = {
                             email: email,
                             password: password,
-                            options: options
+                            options: options,
                         };
                         _a.label = 1;
                     case 1:
