@@ -1,6 +1,6 @@
 {
   "name": "@suplere/hbp_quasar",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Impelent NHOST SDK to Quasar Framework",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

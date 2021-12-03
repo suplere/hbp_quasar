@@ -358,11 +358,18 @@ var Auth = /** @class */ (function () {
     };
     Auth.prototype.requestPasswordChange = function (email) {
         return __awaiter(this, void 0, void 0, function () {
+            var data;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.httpClient.post("/change-password/request", {
-                            email: email,
-                        })];
+                    case 0:
+                        data = {
+                            email: email
+                        };
+                        if (this.appId)
+                            data["app_id"] = this.appId;
+                        return [4 /*yield*/, this.httpClient.post("/change-password/request", {
+                                data: data
+                            })];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];

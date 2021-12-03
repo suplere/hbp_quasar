@@ -334,8 +334,14 @@ export default class Auth {
   }
 
   public async requestPasswordChange(email: string): Promise<void> {
+    const data = {
+      email
+    };
+
+    if (this.appId) data["app_id"] = this.appId;
+
     await this.httpClient.post("/change-password/request", {
-      email,
+      data
     });
   }
 
