@@ -306,7 +306,7 @@ export default class Auth {
   }
 
   public async updateUser(user: types.User): Promise<void> {
-    await this.httpClient.post(
+    return await this.httpClient.post(
       "/updateUserData",
       { user },
       this._generateAxiosHeaderConfig()
