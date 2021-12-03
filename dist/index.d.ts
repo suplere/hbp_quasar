@@ -34,6 +34,10 @@ export declare class HBPInstance {
     changePassword(oldPassword: any, newPassword: any): Promise<{
         error: any;
     }>;
+    updateUser(user: any): Promise<{
+        error: any;
+        data: any;
+    }>;
     confirmPasswordChange(ticket: any, newPassword: any): Promise<{
         error: any;
     }>;

@@ -77,9 +77,7 @@ export class HBPInstance {
     return this.claims["x-hasura-allowed-roles"].includes(role);
   };
 
-  handleOnAuthStateChanged = async (
-    status: boolean
-  ): Promise<boolean> => {
+  handleOnAuthStateChanged = async (status: boolean): Promise<boolean> => {
     this.authenticated = status;
     // store.commit("app/isAuthenticated", status);
     if (status) {
@@ -95,7 +93,7 @@ export class HBPInstance {
       // store.commit("app/setAuthData", null);
       // store.dispatch("app/getUserSettings", null);
     }
-    return status
+    return status;
   };
 
   routerInitApp = async (to, from, next) => {
@@ -140,7 +138,7 @@ export class HBPInstance {
   };
 
   async requestPasswordChange(email) {
-    let error
+    let error;
     try {
       await this.auth.requestPasswordChange(email);
     } catch (err) {
@@ -148,19 +146,33 @@ export class HBPInstance {
     }
     return {
       error,
-    }; 
+    };
   }
 
   async changePassword(oldPassword, newPassword) {
-    let error
-    try{
+    let error;
+    try {
       await this.auth.changePassword(oldPassword, newPassword);
     } catch (err) {
-      error = err
+      error = err;
     }
     return {
-      error
-    } 
+      error,
+    };
+  }
+
+  async updateUser(user) {
+    let error;
+    let data;
+    try {
+      data = await this.auth.updateUser(user);
+    } catch (err) {
+      error = err;
+    }
+    return {
+      error,
+      data
+    };
   }
 
   async confirmPasswordChange(ticket, newPassword) {
@@ -171,8 +183,8 @@ export class HBPInstance {
       error = err;
     }
     return {
-      error
-    } 
+      error,
+    };
   }
 
   async login(email: string, password: string) {

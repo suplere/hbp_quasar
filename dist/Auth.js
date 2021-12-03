@@ -133,7 +133,7 @@ var Auth = /** @class */ (function () {
                             register_options: registerOptions,
                         };
                         if (this.appId) {
-                            data['app_id'] = this.appId;
+                            data["app_id"] = this.appId;
                         }
                         _c.label = 1;
                     case 1:
@@ -176,7 +176,7 @@ var Auth = /** @class */ (function () {
                             cookie: this.useCookies,
                         };
                         if (this.appId)
-                            data['app_id'] = this.appId;
+                            data["app_id"] = this.appId;
                         _b.label = 1;
                     case 1:
                         _b.trys.push([1, 3, , 4]);
@@ -326,6 +326,18 @@ var Auth = /** @class */ (function () {
             });
         });
     };
+    Auth.prototype.updateUser = function (user) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.httpClient.post("/updateUserData", { user: user }, this._generateAxiosHeaderConfig())];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
     Auth.prototype.requestEmailChange = function (new_email) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -374,7 +386,7 @@ var Auth = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         data = {
-                            email: email
+                            email: email,
                         };
                         if (this.appId)
                             data["app_id"] = this.appId;
@@ -647,11 +659,10 @@ var Auth = /** @class */ (function () {
             return null;
         return {
             headers: {
-                Authorization: "Bearer " + ((_a = this.currentSession.getSession()) === null || _a === void 0 ? void 0 : _a.jwt_token)
-            }
+                Authorization: "Bearer " + ((_a = this.currentSession.getSession()) === null || _a === void 0 ? void 0 : _a.jwt_token),
+            },
         };
     };
-    ;
     Auth.prototype._autoLogin = function (refreshToken) {
         if (this.ssr) {
             return;

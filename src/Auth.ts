@@ -36,7 +36,7 @@ export default class Auth {
       clientStorageType,
       ssr,
       autoLogin,
-      appId
+      appId,
     } = config;
 
     this.useCookies = useCookies;
@@ -130,7 +130,7 @@ export default class Auth {
     };
 
     if (this.appId) {
-      data['app_id'] = this.appId;
+      data["app_id"] = this.appId;
     }
 
     let res;
@@ -174,7 +174,7 @@ export default class Auth {
       cookie: this.useCookies,
     };
 
-    if (this.appId) data['app_id'] = this.appId
+    if (this.appId) data["app_id"] = this.appId;
 
     try {
       res = await this.httpClient.post("/login", data);
@@ -305,6 +305,14 @@ export default class Auth {
     );
   }
 
+  public async updateUser(user: types.User): Promise<void> {
+    await this.httpClient.post(
+      "/updateUserData",
+      { user },
+      this._generateAxiosHeaderConfig()
+    );
+  }
+
   public async requestEmailChange(new_email: string): Promise<void> {
     await this.httpClient.post(
       "/change-email/request",
@@ -335,13 +343,13 @@ export default class Auth {
 
   public async requestPasswordChange(email: string): Promise<void> {
     const data = {
-      email
+      email,
     };
 
     if (this.appId) data["app_id"] = this.appId;
 
     await this.httpClient.post("/change-password/request", {
-      ...data
+      ...data,
     });
   }
 
@@ -495,7 +503,6 @@ export default class Auth {
         return this.clientStorage.getItemAsync(key);
       default:
         break;
-      
     }
     return false;
   }
@@ -546,10 +553,10 @@ export default class Auth {
     if (this.useCookies) return null;
     return {
       headers: {
-        Authorization: `Bearer ${this.currentSession.getSession()?.jwt_token}`
-      }
-    }
-  };
+        Authorization: `Bearer ${this.currentSession.getSession()?.jwt_token}`,
+      },
+    };
+  }
 
   private _autoLogin(refreshToken: string | null): void {
     if (this.ssr) {
@@ -626,7 +633,7 @@ export default class Auth {
 
     this.currentSession.clearSession();
     this._removeItem("nhostRefreshToken");
-    this.currentUser = null
+    this.currentUser = null;
 
     this.loading = false;
     this.authStateChanged(false);

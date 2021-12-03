@@ -71,6 +71,9 @@ export interface User {
     email?: string;
     display_name?: string;
     avatar_url?: string;
+    firstname?: string;
+    lastname?: string;
+    mobile?: string;
 }
 export interface JWTHasuraClaims {
     [claim: string]: string | string[];

@@ -47,6 +47,7 @@ export default class Auth {
     refreshSession(initRefreshToken?: string | null): Promise<void>;
     activate(ticket: string): Promise<void>;
     changeEmail(new_email: string): Promise<void>;
+    updateUser(user: types.User): Promise<void>;
     requestEmailChange(new_email: string): Promise<void>;
     confirmEmailChange(ticket: string): Promise<void>;
     changePassword(oldPassword: string, newPassword: string): Promise<void>;
