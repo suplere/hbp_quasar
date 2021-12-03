@@ -341,7 +341,7 @@ export default class Auth {
     if (this.appId) data["app_id"] = this.appId;
 
     await this.httpClient.post("/change-password/request", {
-      data
+      ...data
     });
   }
 
