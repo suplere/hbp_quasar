@@ -180,38 +180,73 @@ var HBPInstance = /** @class */ (function () {
     }
     HBPInstance.prototype.requestPasswordChange = function (email) {
         return __awaiter(this, void 0, void 0, function () {
+            var error, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.auth.requestPasswordChange(email)];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.auth.requestPasswordChange(email)];
                     case 1:
                         _a.sent();
-                        return [2 /*return*/];
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_1 = _a.sent();
+                        error = err_1;
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/, {
+                            error: error,
+                        }];
                 }
             });
         });
     };
     HBPInstance.prototype.changePassword = function (oldPassword, newPassword) {
         return __awaiter(this, void 0, void 0, function () {
+            var error, err_2;
             return __generator(this, function (_a) {
-                return [2 /*return*/, this.auth.changePassword(oldPassword, newPassword)];
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.auth.changePassword(oldPassword, newPassword)];
+                    case 1:
+                        _a.sent();
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_2 = _a.sent();
+                        error = err_2;
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/, {
+                            error: error
+                        }];
+                }
             });
         });
     };
     HBPInstance.prototype.confirmPasswordChange = function (ticket, newPassword) {
         return __awaiter(this, void 0, void 0, function () {
+            var error, err_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.auth.confirmPasswordChange(newPassword, ticket)];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.auth.confirmPasswordChange(newPassword, ticket)];
                     case 1:
                         _a.sent();
-                        return [2 /*return*/];
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_3 = _a.sent();
+                        error = err_3;
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/, {
+                            error: error
+                        }];
                 }
             });
         });
     };
     HBPInstance.prototype.login = function (email, password) {
         return __awaiter(this, void 0, void 0, function () {
-            var error, data, err_1;
+            var error, data, err_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -222,8 +257,8 @@ var HBPInstance = /** @class */ (function () {
                         data = _a.sent();
                         return [3 /*break*/, 3];
                     case 2:
-                        err_1 = _a.sent();
-                        error = err_1;
+                        err_4 = _a.sent();
+                        error = err_4;
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/, {
                             data: data,
@@ -235,7 +270,7 @@ var HBPInstance = /** @class */ (function () {
     };
     HBPInstance.prototype.createUserWithEmail = function (email, password, additionalFields) {
         return __awaiter(this, void 0, void 0, function () {
-            var error, data, userData, options, registerData, err_2;
+            var error, data, userData, options, registerData, err_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -257,8 +292,8 @@ var HBPInstance = /** @class */ (function () {
                         data = _a.sent();
                         return [3 /*break*/, 4];
                     case 3:
-                        err_2 = _a.sent();
-                        error = err_2;
+                        err_5 = _a.sent();
+                        error = err_5;
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/, {
                             data: data,
@@ -270,7 +305,7 @@ var HBPInstance = /** @class */ (function () {
     };
     HBPInstance.prototype.logout = function (email, password) {
         return __awaiter(this, void 0, void 0, function () {
-            var error, data, err_3;
+            var error, data, err_6;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -281,8 +316,8 @@ var HBPInstance = /** @class */ (function () {
                         data = _a.sent();
                         return [3 /*break*/, 3];
                     case 2:
-                        err_3 = _a.sent();
-                        error = err_3;
+                        err_6 = _a.sent();
+                        error = err_6;
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/, {
                             data: data,

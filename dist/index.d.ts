@@ -28,9 +28,15 @@ export declare class HBPInstance {
     handleOnAuthStateChanged: (status: boolean) => Promise<boolean>;
     routerInitApp: (to: any, from: any, next: any) => Promise<void>;
     routeAuthorizeGuard: (router: any, store: any) => (to: any, from: any, next: any) => void;
-    requestPasswordChange(email: any): Promise<void>;
-    changePassword(oldPassword: any, newPassword: any): Promise<void>;
-    confirmPasswordChange(ticket: any, newPassword: any): Promise<void>;
+    requestPasswordChange(email: any): Promise<{
+        error: any;
+    }>;
+    changePassword(oldPassword: any, newPassword: any): Promise<{
+        error: any;
+    }>;
+    confirmPasswordChange(ticket: any, newPassword: any): Promise<{
+        error: any;
+    }>;
     login(email: string, password: string): Promise<{
         data: any;
         error: any;

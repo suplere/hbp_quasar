@@ -140,15 +140,39 @@ export class HBPInstance {
   };
 
   async requestPasswordChange(email) {
-    await this.auth.requestPasswordChange(email);
+    let error
+    try {
+      await this.auth.requestPasswordChange(email);
+    } catch (err) {
+      error = err;
+    }
+    return {
+      error,
+    }; 
   }
 
   async changePassword(oldPassword, newPassword) {
-    return this.auth.changePassword(oldPassword, newPassword);
+    let error
+    try{
+      await this.auth.changePassword(oldPassword, newPassword);
+    } catch (err) {
+      error = err
+    }
+    return {
+      error
+    } 
   }
 
   async confirmPasswordChange(ticket, newPassword) {
-    await this.auth.confirmPasswordChange(newPassword, ticket);
+    let error;
+    try {
+      await this.auth.confirmPasswordChange(newPassword, ticket);
+    } catch (err) {
+      error = err;
+    }
+    return {
+      error
+    } 
   }
 
   async login(email: string, password: string) {
