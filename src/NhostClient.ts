@@ -58,6 +58,7 @@ export default class NhostClient {
       {
         baseURL: this.appId ? `${this.baseURL}/custom` : this.baseURL,
         useCookies: this.useCookies,
+        appId: this.appId,
       },
       this.session
     );

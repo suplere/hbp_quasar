@@ -39,6 +39,7 @@ var NhostClient = /** @class */ (function () {
         this.storage = new Storage_1.default({
             baseURL: this.appId ? this.baseURL + "/custom" : this.baseURL,
             useCookies: this.useCookies,
+            appId: this.appId,
         }, this.session);
     }
     return NhostClient;
