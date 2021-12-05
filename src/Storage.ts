@@ -20,21 +20,23 @@ export default class Storage {
     this.appId = config.appId;
 
     this.httpClient = axios.create({
-      baseURL: config.baseURL,
+      baseURL: this.appId
+        ? `${config.baseURL}/storage/${this.appId}`
+        : `${config.baseURL}/storage`,
       timeout: 120 * 1000, // milliseconds
       withCredentials: this.useCookies,
     });
   }
 
-  private generateApplicationIdHeader(): null | types.Headers {
-    if (this.appId) {
-      return {
-        ApplicationId: `${this.appId}`,
-      };
-    } else {
-      return null;
-    }
-  }
+  // private generateApplicationIdHeader(): null | types.Headers {
+  //   if (this.appId) {
+  //     return {
+  //       ApplicationId: `${this.appId}`,
+  //     };
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   private generateAuthorizationHeader(): null | types.Headers {
     if (this.useCookies) return null;
@@ -69,13 +71,12 @@ export default class Storage {
     }
 
     const upload_res = await this.httpClient.post(
-      `/storage/o${path}`,
+      `/o${path}`,
       formData,
       {
         headers: {
           "Content-Type": "multipart/form-data",
           ...this.generateAuthorizationHeader(),
-          ...this.generateApplicationIdHeader(),
         },
         onUploadProgress,
       }
@@ -133,13 +134,12 @@ export default class Storage {
     formData.append("file", file);
 
     const uploadRes = await this.httpClient.post(
-      `/storage/o${path}`,
+      `/o${path}`,
       formData,
       {
         headers: {
           "Content-Type": "multipart/form-data",
           ...this.generateAuthorizationHeader(),
-          ...this.generateApplicationIdHeader(),
         },
         onUploadProgress,
       }
@@ -152,10 +152,9 @@ export default class Storage {
     if (!path.startsWith("/")) {
       throw new Error("`path` must start with `/`");
     }
-    const requestRes = await this.httpClient.delete(`storage/o${path}`, {
+    const requestRes = await this.httpClient.delete(`/o${path}`, {
       headers: {
-        ...this.generateAuthorizationHeader(),
-        ...this.generateApplicationIdHeader(),
+        ...this.generateAuthorizationHeader()
       },
     });
     return requestRes.data;
@@ -165,10 +164,9 @@ export default class Storage {
     if (!path.startsWith("/")) {
       throw new Error("`path` must start with `/`");
     }
-    const res = await this.httpClient.get(`storage/m${path}`, {
+    const res = await this.httpClient.get(`/m${path}`, {
       headers: {
-        ...this.generateAuthorizationHeader(),
-        ...this.generateApplicationIdHeader(),
+        ...this.generateAuthorizationHeader()
       },
     });
     return res.data;

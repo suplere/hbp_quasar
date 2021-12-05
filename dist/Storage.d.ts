@@ -6,7 +6,6 @@ export default class Storage {
     private currentSession;
     private appId;
     constructor(config: types.StorageConfig, session: UserSession);
-    private generateApplicationIdHeader;
     private generateAuthorizationHeader;
     put(path: string, file: File, metadata?: object | null, onUploadProgress?: any | undefined): Promise<any>;
     putString(path: string, data: string, type?: "raw" | "data_url", metadata?: {

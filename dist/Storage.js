@@ -58,21 +58,22 @@ var Storage = /** @class */ (function () {
         this.useCookies = config.useCookies;
         this.appId = config.appId;
         this.httpClient = axios_1.default.create({
-            baseURL: config.baseURL,
+            baseURL: this.appId
+                ? config.baseURL + "/storage/" + this.appId
+                : config.baseURL + "/storage",
             timeout: 120 * 1000,
             withCredentials: this.useCookies,
         });
     }
-    Storage.prototype.generateApplicationIdHeader = function () {
-        if (this.appId) {
-            return {
-                ApplicationId: "" + this.appId,
-            };
-        }
-        else {
-            return null;
-        }
-    };
+    // private generateApplicationIdHeader(): null | types.Headers {
+    //   if (this.appId) {
+    //     return {
+    //       ApplicationId: `${this.appId}`,
+    //     };
+    //   } else {
+    //     return null;
+    //   }
+    // }
     Storage.prototype.generateAuthorizationHeader = function () {
         var _a;
         if (this.useCookies)
@@ -104,8 +105,8 @@ var Storage = /** @class */ (function () {
                         if (metadata !== null) {
                             console.warn("Metadata is not yet handled in this version.");
                         }
-                        return [4 /*yield*/, this.httpClient.post("/storage/o" + path, formData, {
-                                headers: __assign(__assign({ "Content-Type": "multipart/form-data" }, this.generateAuthorizationHeader()), this.generateApplicationIdHeader()),
+                        return [4 /*yield*/, this.httpClient.post("/o" + path, formData, {
+                                headers: __assign({ "Content-Type": "multipart/form-data" }, this.generateAuthorizationHeader()),
                                 onUploadProgress: onUploadProgress,
                             })];
                     case 1:
@@ -158,8 +159,8 @@ var Storage = /** @class */ (function () {
                         file = new File([fileData], "untitled", { type: contentType });
                         formData = new FormData();
                         formData.append("file", file);
-                        return [4 /*yield*/, this.httpClient.post("/storage/o" + path, formData, {
-                                headers: __assign(__assign({ "Content-Type": "multipart/form-data" }, this.generateAuthorizationHeader()), this.generateApplicationIdHeader()),
+                        return [4 /*yield*/, this.httpClient.post("/o" + path, formData, {
+                                headers: __assign({ "Content-Type": "multipart/form-data" }, this.generateAuthorizationHeader()),
                                 onUploadProgress: onUploadProgress,
                             })];
                     case 1:
@@ -178,8 +179,8 @@ var Storage = /** @class */ (function () {
                         if (!path.startsWith("/")) {
                             throw new Error("`path` must start with `/`");
                         }
-                        return [4 /*yield*/, this.httpClient.delete("storage/o" + path, {
-                                headers: __assign(__assign({}, this.generateAuthorizationHeader()), this.generateApplicationIdHeader()),
+                        return [4 /*yield*/, this.httpClient.delete("/o" + path, {
+                                headers: __assign({}, this.generateAuthorizationHeader()),
                             })];
                     case 1:
                         requestRes = _a.sent();
@@ -197,8 +198,8 @@ var Storage = /** @class */ (function () {
                         if (!path.startsWith("/")) {
                             throw new Error("`path` must start with `/`");
                         }
-                        return [4 /*yield*/, this.httpClient.get("storage/m" + path, {
-                                headers: __assign(__assign({}, this.generateAuthorizationHeader()), this.generateApplicationIdHeader()),
+                        return [4 /*yield*/, this.httpClient.get("/m" + path, {
+                                headers: __assign({}, this.generateAuthorizationHeader()),
                             })];
                     case 1:
                         res = _a.sent();
