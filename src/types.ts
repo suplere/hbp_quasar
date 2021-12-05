@@ -61,6 +61,7 @@ export interface LoginData {
 
 export interface Headers {
   Authorization?: string;
+  ApplicationId?: string;
 }
 
 export type Provider =

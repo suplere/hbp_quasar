@@ -48,6 +48,7 @@ export interface LoginData {
 }
 export interface Headers {
     Authorization?: string;
+    ApplicationId?: string;
 }
 export declare type Provider = "apple" | "facebook" | "github" | "google" | "linkedin" | "spotify" | "twitter" | "windowslive";
 export interface UserCredentials {

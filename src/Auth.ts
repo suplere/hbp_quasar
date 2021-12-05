@@ -99,6 +99,16 @@ export default class Auth {
     }
   }
 
+  private generateApplicationIdHeader(): null | types.Headers {
+    if (this.appId) {
+      return {
+        ApplicationId: `${this.appId}`,
+      };
+    } else {
+      return null;
+    }
+  }
+
   public user(): types.User | null {
     return this.currentUser;
   }
@@ -129,13 +139,17 @@ export default class Auth {
       register_options: registerOptions,
     };
 
-    if (this.appId) {
-      data["app_id"] = this.appId;
-    }
+    // if (this.appId) {
+    //   data["app_id"] = this.appId;
+    // }
 
     let res;
     try {
-      res = await this.httpClient.post("/register", data);
+      res = await this.httpClient.post(
+        "/register",
+        data,
+        this._generateAxiosHeaderConfig()
+      );
     } catch (error) {
       throw error;
     }
@@ -174,10 +188,14 @@ export default class Auth {
       cookie: this.useCookies,
     };
 
-    if (this.appId) data["app_id"] = this.appId;
+    // if (this.appId) data["app_id"] = this.appId;
 
     try {
-      res = await this.httpClient.post("/login", data);
+      res = await this.httpClient.post(
+        "/login",
+        data,
+        this._generateAxiosHeaderConfig()
+      );
     } catch (error) {
       this._clearSession();
       throw error;
@@ -207,6 +225,9 @@ export default class Auth {
           all,
         },
         {
+          headers: {
+            ...this.generateApplicationIdHeader(),
+          },
           params: {
             refresh_token: await this._getItem("nhostRefreshToken"),
           },
@@ -294,7 +315,10 @@ export default class Auth {
   }
 
   public async activate(ticket: string): Promise<void> {
-    await this.httpClient.get(`/activate?ticket=${ticket}`);
+    await this.httpClient.get(
+      `/activate?ticket=${ticket}`,
+      this._generateAxiosHeaderConfig()
+    );
   }
 
   public async changeEmail(new_email: string): Promise<void> {
@@ -322,9 +346,13 @@ export default class Auth {
   }
 
   public async confirmEmailChange(ticket: string): Promise<void> {
-    await this.httpClient.post("/change-email/change", {
-      ticket,
-    });
+    await this.httpClient.post(
+      "/change-email/change",
+      {
+        ticket,
+      },
+      this._generateAxiosHeaderConfig()
+    );
   }
 
   public async changePassword(
@@ -346,21 +374,29 @@ export default class Auth {
       email,
     };
 
-    if (this.appId) data["app_id"] = this.appId;
+    // if (this.appId) data["app_id"] = this.appId;
 
-    await this.httpClient.post("/change-password/request", {
-      ...data,
-    });
+    await this.httpClient.post(
+      "/change-password/request",
+      {
+        ...data,
+      },
+      this._generateAxiosHeaderConfig()
+    );
   }
 
   public async confirmPasswordChange(
     newPassword: string,
     ticket: string
   ): Promise<void> {
-    await this.httpClient.post("/change-password/change", {
-      new_password: newPassword,
-      ticket,
-    });
+    await this.httpClient.post(
+      "/change-password/change",
+      {
+        new_password: newPassword,
+        ticket,
+      },
+      this._generateAxiosHeaderConfig()
+    );
   }
 
   public async MFAGenerate(): Promise<void> {
@@ -399,11 +435,15 @@ export default class Auth {
     session: types.Session;
     user: types.User;
   }> {
-    const res = await this.httpClient.post("/mfa/totp", {
-      code,
-      ticket,
-      cookie: this.useCookies,
-    });
+    const res = await this.httpClient.post(
+      "/mfa/totp",
+      {
+        code,
+        ticket,
+        cookie: this.useCookies,
+      },
+      this._generateAxiosHeaderConfig()
+    );
 
     this._setSession(res.data);
 
@@ -550,12 +590,28 @@ export default class Auth {
   }
 
   private _generateAxiosHeaderConfig(): null | AxiosRequestConfig {
-    if (this.useCookies) return null;
-    return {
+    if (this.useCookies)
+      return {
+        headers: {
+          ...this.generateApplicationIdHeader(),
+        },
+      };
+    const token = this.currentSession.getSession()?.jwt_token
+    if (token) {
+      return {
       headers: {
-        Authorization: `Bearer ${this.currentSession.getSession()?.jwt_token}`,
+        Authorization: `Bearer ${token}`,
+        ...this.generateApplicationIdHeader(),
       },
     };
+    } else {
+      return {
+        headers: {
+          ...this.generateApplicationIdHeader(),
+        },
+      };
+    } 
+    
   }
 
   private _autoLogin(refreshToken: string | null): void {
@@ -590,6 +646,9 @@ export default class Auth {
 
       // make refresh token request
       res = await this.httpClient.get("/token/refresh", {
+        headers: {
+          ...this.generateApplicationIdHeader(),
+        },
         params: {
           refresh_token: refreshToken,
         },

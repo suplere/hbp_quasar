@@ -63,6 +63,16 @@ var Storage = /** @class */ (function () {
             withCredentials: this.useCookies,
         });
     }
+    Storage.prototype.generateApplicationIdHeader = function () {
+        if (this.appId) {
+            return {
+                ApplicationId: "" + this.appId,
+            };
+        }
+        else {
+            return null;
+        }
+    };
     Storage.prototype.generateAuthorizationHeader = function () {
         var _a;
         if (this.useCookies)
@@ -95,7 +105,7 @@ var Storage = /** @class */ (function () {
                             console.warn("Metadata is not yet handled in this version.");
                         }
                         return [4 /*yield*/, this.httpClient.post("/storage/o" + path, formData, {
-                                headers: __assign({ "Content-Type": "multipart/form-data" }, this.generateAuthorizationHeader()),
+                                headers: __assign(__assign({ "Content-Type": "multipart/form-data" }, this.generateAuthorizationHeader()), this.generateApplicationIdHeader()),
                                 onUploadProgress: onUploadProgress,
                             })];
                     case 1:
@@ -149,7 +159,7 @@ var Storage = /** @class */ (function () {
                         formData = new FormData();
                         formData.append("file", file);
                         return [4 /*yield*/, this.httpClient.post("/storage/o" + path, formData, {
-                                headers: __assign({ "Content-Type": "multipart/form-data" }, this.generateAuthorizationHeader()),
+                                headers: __assign(__assign({ "Content-Type": "multipart/form-data" }, this.generateAuthorizationHeader()), this.generateApplicationIdHeader()),
                                 onUploadProgress: onUploadProgress,
                             })];
                     case 1:
@@ -169,7 +179,7 @@ var Storage = /** @class */ (function () {
                             throw new Error("`path` must start with `/`");
                         }
                         return [4 /*yield*/, this.httpClient.delete("storage/o" + path, {
-                                headers: __assign({}, this.generateAuthorizationHeader()),
+                                headers: __assign(__assign({}, this.generateAuthorizationHeader()), this.generateApplicationIdHeader()),
                             })];
                     case 1:
                         requestRes = _a.sent();
@@ -188,7 +198,7 @@ var Storage = /** @class */ (function () {
                             throw new Error("`path` must start with `/`");
                         }
                         return [4 /*yield*/, this.httpClient.get("storage/m" + path, {
-                                headers: __assign({}, this.generateAuthorizationHeader()),
+                                headers: __assign(__assign({}, this.generateAuthorizationHeader()), this.generateApplicationIdHeader()),
                             })];
                     case 1:
                         res = _a.sent();

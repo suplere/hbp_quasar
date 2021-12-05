@@ -108,6 +108,16 @@ var Auth = /** @class */ (function () {
             this._setItem("nhostRefreshToken", refreshToken);
         }
     }
+    Auth.prototype.generateApplicationIdHeader = function () {
+        if (this.appId) {
+            return {
+                ApplicationId: "" + this.appId,
+            };
+        }
+        else {
+            return null;
+        }
+    };
     Auth.prototype.user = function () {
         return this.currentUser;
     };
@@ -132,13 +142,10 @@ var Auth = /** @class */ (function () {
                             user_data: userData,
                             register_options: registerOptions,
                         };
-                        if (this.appId) {
-                            data["app_id"] = this.appId;
-                        }
                         _c.label = 1;
                     case 1:
                         _c.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, this.httpClient.post("/register", data)];
+                        return [4 /*yield*/, this.httpClient.post("/register", data, this._generateAxiosHeaderConfig())];
                     case 2:
                         res = _c.sent();
                         return [3 /*break*/, 4];
@@ -175,12 +182,10 @@ var Auth = /** @class */ (function () {
                             password: password,
                             cookie: this.useCookies,
                         };
-                        if (this.appId)
-                            data["app_id"] = this.appId;
                         _b.label = 1;
                     case 1:
                         _b.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, this.httpClient.post("/login", data)];
+                        return [4 /*yield*/, this.httpClient.post("/login", data, this._generateAxiosHeaderConfig())];
                     case 2:
                         res = _b.sent();
                         return [3 /*break*/, 4];
@@ -215,7 +220,9 @@ var Auth = /** @class */ (function () {
                             {
                                 all: all,
                             }];
-                        _d = {};
+                        _d = {
+                            headers: __assign({}, this.generateApplicationIdHeader())
+                        };
                         _e = {};
                         return [4 /*yield*/, this._getItem("nhostRefreshToken")];
                     case 1: return [4 /*yield*/, _b.apply(_a, _c.concat([(_d.params = (_e.refresh_token = _f.sent(),
@@ -306,7 +313,7 @@ var Auth = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.httpClient.get("/activate?ticket=" + ticket)];
+                    case 0: return [4 /*yield*/, this.httpClient.get("/activate?ticket=" + ticket, this._generateAxiosHeaderConfig())];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -354,7 +361,7 @@ var Auth = /** @class */ (function () {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.httpClient.post("/change-email/change", {
                             ticket: ticket,
-                        })];
+                        }, this._generateAxiosHeaderConfig())];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -386,10 +393,10 @@ var Auth = /** @class */ (function () {
                         data = {
                             email: email,
                         };
-                        if (this.appId)
-                            data["app_id"] = this.appId;
-                        return [4 /*yield*/, this.httpClient.post("/change-password/request", __assign({}, data))];
+                        // if (this.appId) data["app_id"] = this.appId;
+                        return [4 /*yield*/, this.httpClient.post("/change-password/request", __assign({}, data), this._generateAxiosHeaderConfig())];
                     case 1:
+                        // if (this.appId) data["app_id"] = this.appId;
                         _a.sent();
                         return [2 /*return*/];
                 }
@@ -403,7 +410,7 @@ var Auth = /** @class */ (function () {
                     case 0: return [4 /*yield*/, this.httpClient.post("/change-password/change", {
                             new_password: newPassword,
                             ticket: ticket,
-                        })];
+                        }, this._generateAxiosHeaderConfig())];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -461,7 +468,7 @@ var Auth = /** @class */ (function () {
                             code: code,
                             ticket: ticket,
                             cookie: this.useCookies,
-                        })];
+                        }, this._generateAxiosHeaderConfig())];
                     case 1:
                         res = _a.sent();
                         this._setSession(res.data);
@@ -654,12 +661,20 @@ var Auth = /** @class */ (function () {
     Auth.prototype._generateAxiosHeaderConfig = function () {
         var _a;
         if (this.useCookies)
-            return null;
-        return {
-            headers: {
-                Authorization: "Bearer " + ((_a = this.currentSession.getSession()) === null || _a === void 0 ? void 0 : _a.jwt_token),
-            },
-        };
+            return {
+                headers: __assign({}, this.generateApplicationIdHeader()),
+            };
+        var token = (_a = this.currentSession.getSession()) === null || _a === void 0 ? void 0 : _a.jwt_token;
+        if (token) {
+            return {
+                headers: __assign({ Authorization: "Bearer " + token }, this.generateApplicationIdHeader()),
+            };
+        }
+        else {
+            return {
+                headers: __assign({}, this.generateApplicationIdHeader()),
+            };
+        }
     };
     Auth.prototype._autoLogin = function (refreshToken) {
         if (this.ssr) {
@@ -700,6 +715,7 @@ var Auth = /** @class */ (function () {
                         }
                         this.refreshTokenLock = true;
                         return [4 /*yield*/, this.httpClient.get("/token/refresh", {
+                                headers: __assign({}, this.generateApplicationIdHeader()),
                                 params: {
                                     refresh_token: refreshToken,
                                 },

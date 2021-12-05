@@ -21,6 +21,7 @@ export default class Auth {
     private sampleRate;
     private appId;
     constructor(config: types.AuthConfig, session: UserSession);
+    private generateApplicationIdHeader;
     user(): types.User | null;
     register({ email, password, options, }: types.UserCredentials): Promise<{
         session: types.Session | null;

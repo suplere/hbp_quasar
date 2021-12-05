@@ -17,13 +17,23 @@ export default class Storage {
   constructor(config: types.StorageConfig, session: UserSession) {
     this.currentSession = session;
     this.useCookies = config.useCookies;
-    this.appId = config.appId
+    this.appId = config.appId;
 
     this.httpClient = axios.create({
       baseURL: config.baseURL,
       timeout: 120 * 1000, // milliseconds
       withCredentials: this.useCookies,
     });
+  }
+
+  private generateApplicationIdHeader(): null | types.Headers {
+    if (this.appId) {
+      return {
+        ApplicationId: `${this.appId}`,
+      };
+    } else {
+      return null;
+    }
   }
 
   private generateAuthorizationHeader(): null | types.Headers {
@@ -65,6 +75,7 @@ export default class Storage {
         headers: {
           "Content-Type": "multipart/form-data",
           ...this.generateAuthorizationHeader(),
+          ...this.generateApplicationIdHeader(),
         },
         onUploadProgress,
       }
@@ -120,7 +131,7 @@ export default class Storage {
     // create form data
     let formData = new FormData();
     formData.append("file", file);
-    
+
     const uploadRes = await this.httpClient.post(
       `/storage/o${path}`,
       formData,
@@ -128,6 +139,7 @@ export default class Storage {
         headers: {
           "Content-Type": "multipart/form-data",
           ...this.generateAuthorizationHeader(),
+          ...this.generateApplicationIdHeader(),
         },
         onUploadProgress,
       }
@@ -143,6 +155,7 @@ export default class Storage {
     const requestRes = await this.httpClient.delete(`storage/o${path}`, {
       headers: {
         ...this.generateAuthorizationHeader(),
+        ...this.generateApplicationIdHeader(),
       },
     });
     return requestRes.data;
@@ -155,6 +168,7 @@ export default class Storage {
     const res = await this.httpClient.get(`storage/m${path}`, {
       headers: {
         ...this.generateAuthorizationHeader(),
+        ...this.generateApplicationIdHeader(),
       },
     });
     return res.data;
