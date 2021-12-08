@@ -1,3 +1,17 @@
+export interface NHostConfig {
+  baseURL: string;
+  useCookies?: boolean;
+  refreshIntervalTime?: number | null;
+  clientStorage?: ClientStorage;
+  clientStorageType?: string;
+  autoLogin?: boolean;
+  ssr?: boolean;
+  appId?: string | null;
+  createStorage?: boolean;
+  handleNotifications?: boolean;
+  publicVapidKey?: string;
+}
+
 export interface UserConfig {
   baseURL: string;
   useCookies?: boolean;
@@ -17,6 +31,12 @@ export interface AuthConfig {
   clientStorageType: string;
   ssr?: boolean;
   autoLogin: boolean;
+  appId?: string | null;
+}
+
+export interface NotificationConfig {
+  baseURL: string;
+  publicVapidKey: string;
   appId?: string | null;
 }
 
@@ -112,4 +132,41 @@ export interface JWTClaims {
   sub?: string;
   iat?: number;
   "https://hasura.io/jwt/claims": JWTHasuraClaims;
+}
+
+export interface Subscription {
+  endpoint: string;
+  expirationTime?: number;
+  keys: {
+    auth: string;
+    p256dh: string;
+  };
+}
+
+export enum Browser {
+    Safari = "safari",
+    Firefox = "firefox",
+    Chrome = "chrome",
+    Opera = "opera",
+    Edge = "edge",
+    Other = "other"
+}
+
+export interface EnvironmentInfo {
+    browserType: Browser;
+    browserVersion: number;
+    isHttps: boolean;
+    isBrowserAndSupportsServiceWorkers: boolean;
+    requiresUserInteraction: boolean;
+    osName: string;
+    osVersion: string|number;
+    canTalkToServiceWorker: boolean;
+}
+
+export interface UserSubscription {
+  id: string;
+  subscription: Subscription;
+  enviromentInfo?: EnvironmentInfo;
+  tags?: string[];
+  segments?: string[];
 }

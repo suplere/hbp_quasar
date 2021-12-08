@@ -1,12 +1,45 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.percentEncodedBytes = exports.utf8Bytes = exports.base64Bytes = exports.StringFormat = void 0;
+exports.percentEncodedBytes = exports.utf8Bytes = exports.base64Bytes = exports.parseVersionString = exports.urlBase64ToUint8Array = exports.StringFormat = void 0;
 exports.StringFormat = {
     RAW: "raw",
     BASE64: "base64",
     BASE64URL: "base64url",
     DATA_URL: "data_url",
 };
+var urlBase64ToUint8Array = function (base64String) {
+    var padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+    var base64 = (base64String + padding)
+        .replace(/\-/g, "+")
+        .replace(/_/g, "/");
+    var rawData = window.atob(base64);
+    var outputArray = new Uint8Array(rawData.length);
+    for (var i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+};
+exports.urlBase64ToUint8Array = urlBase64ToUint8Array;
+function padStart(str, targetLength, padString) {
+    var result = str;
+    while (result.length < targetLength) {
+        result = padString + result;
+    }
+    return result;
+}
+function parseVersionString(version) {
+    var osVersionParts = version.toString().split(".");
+    var majorVersion = padStart(osVersionParts[0], 2, "0");
+    var minorVersion;
+    if (osVersionParts[1]) {
+        minorVersion = padStart(osVersionParts[1], 2, "0");
+    }
+    else {
+        minorVersion = "00";
+    }
+    return Number(majorVersion + "." + minorVersion);
+}
+exports.parseVersionString = parseVersionString;
 function base64Bytes(format, value) {
     switch (format) {
         case exports.StringFormat.BASE64: {

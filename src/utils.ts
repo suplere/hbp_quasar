@@ -6,6 +6,46 @@ export const StringFormat = {
   DATA_URL: "data_url",
 };
 
+export const urlBase64ToUint8Array = (base64String) => {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding)
+    .replace(/\-/g, "+")
+    .replace(/_/g, "/");
+
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+};
+
+function padStart(
+  str: string,
+  targetLength: number,
+  padString: string
+): string {
+  let result = str;
+  while (result.length < targetLength) {
+    result = padString + result;
+  }
+  return result;
+}
+
+export function parseVersionString(version: string | number): number {
+  const osVersionParts = version.toString().split(".");
+  const majorVersion = padStart(osVersionParts[0], 2, "0");
+  let minorVersion: string;
+  if (osVersionParts[1]) {
+    minorVersion = padStart(osVersionParts[1], 2, "0");
+  } else {
+    minorVersion = "00";
+  }
+
+  return Number(`${majorVersion}.${minorVersion}`);
+}
+
 export function base64Bytes(format: StringFormat, value: string): Uint8Array {
   switch (format) {
     case StringFormat.BASE64: {
