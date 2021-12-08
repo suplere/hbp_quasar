@@ -153,9 +153,13 @@ var HBPInstance = /** @class */ (function () {
             useCookies: false,
             refreshIntervalTime: (options.refreshIntervalTime || 600) * 1000,
             appId: this.appId,
+            createStorage: options.createStorage,
+            handleNotifications: options.handleNotifications,
+            publicVapidKey: options.publicVapidKey
         });
         this.auth = nhost.auth;
         this.storage = nhost.storage;
+        this.notifications = nhost.notifications;
         this.claims = undefined;
         this.authenticated = false;
         this.token = "";

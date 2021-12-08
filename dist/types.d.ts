@@ -20,6 +20,9 @@ export interface UserConfig {
     autoLogin?: boolean;
     ssr?: boolean;
     appId?: string | null;
+    publicVapidKey?: string;
+    createStorage?: boolean;
+    handleNotifications?: boolean;
 }
 export interface AuthConfig {
     baseURL: string;

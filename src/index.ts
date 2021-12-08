@@ -1,6 +1,7 @@
 import decode from "jwt-decode";
 import Auth from "./Auth";
 import Storage from "./Storage";
+import Notification from "./Notification";
 import NhostClient from "./NhostClient";
 import { UserConfig, JWTHasuraClaims, UserCredentials } from "./types";
 
@@ -26,6 +27,7 @@ export class HBPInstance {
   auth: Auth;
   appId: string;
   storage: Storage;
+  notifications: Notification;
   claims: JWTHasuraClaims;
   token: string;
   authenticated: boolean;
@@ -46,9 +48,13 @@ export class HBPInstance {
       useCookies: false,
       refreshIntervalTime: (options.refreshIntervalTime || 600) * 1000,
       appId: this.appId,
+      createStorage: options.createStorage,
+      handleNotifications: options.handleNotifications,
+      publicVapidKey: options.publicVapidKey
     });
     this.auth = nhost.auth;
     this.storage = nhost.storage;
+    this.notifications = nhost.notifications
     this.claims = undefined;
     this.authenticated = false;
     this.token = "";

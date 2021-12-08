@@ -1,5 +1,6 @@
 import Auth from "./Auth";
 import Storage from "./Storage";
+import Notification from "./Notification";
 import { UserConfig, JWTHasuraClaims } from "./types";
 export interface HBPRouterSettings {
     notAuthorized?: () => void;
@@ -14,6 +15,7 @@ export declare class HBPInstance {
     auth: Auth;
     appId: string;
     storage: Storage;
+    notifications: Notification;
     claims: JWTHasuraClaims;
     token: string;
     authenticated: boolean;
