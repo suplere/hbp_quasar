@@ -48,6 +48,7 @@ var NhostClient = /** @class */ (function () {
             }, this.session);
         }
         if (this.handleNotifications && this.publicVapidKey) {
+            console.log("CREATE NOTIFICATION MODULE");
             this.notifications = new Notification_1.default({
                 baseURL: this.appId ? this.baseURL + "/custom" : this.baseURL,
                 appId: this.appId,

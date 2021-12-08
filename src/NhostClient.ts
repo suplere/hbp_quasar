@@ -74,6 +74,7 @@ export default class NhostClient {
     }
 
     if (this.handleNotifications && this.publicVapidKey) {
+      console.log("CREATE NOTIFICATION MODULE")
       this.notifications = new NhostNotification(
         {
           baseURL: this.appId ? `${this.baseURL}/custom` : this.baseURL,

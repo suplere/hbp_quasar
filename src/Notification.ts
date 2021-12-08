@@ -22,6 +22,7 @@ export default class Notification {
   constructor(config: types.NotificationConfig, session: UserSession) {
     const { baseURL, appId, publicVapidKey } = config;
     this.currentSession = session;
+    this.currentSubscription = null; 
     this.appId = appId;
 
     this.baseURL = baseURL;
@@ -29,6 +30,8 @@ export default class Notification {
     this.loading = true;
 
     this.environment = EnvironmentInfoHelper.getEnvironmentInfo();
+
+    console.log("THIS ENVIROMENT", this.environment);
 
     this.httpClient = axios.create({
       baseURL: `${this.baseURL}/notification`,

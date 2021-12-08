@@ -49,11 +49,13 @@ var Notification = /** @class */ (function () {
         var _a;
         var baseURL = config.baseURL, appId = config.appId, publicVapidKey = config.publicVapidKey;
         this.currentSession = session;
+        this.currentSubscription = null;
         this.appId = appId;
         this.baseURL = baseURL;
         this.publicVapidKey = publicVapidKey;
         this.loading = true;
         this.environment = EnvironmentInfoHelper_1.EnvironmentInfoHelper.getEnvironmentInfo();
+        console.log("THIS ENVIROMENT", this.environment);
         this.httpClient = axios_1.default.create({
             baseURL: this.baseURL + "/notification",
             timeout: 10000,
