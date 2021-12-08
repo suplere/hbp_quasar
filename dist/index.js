@@ -146,7 +146,7 @@ var HBPInstance = /** @class */ (function () {
         }; };
         this.appId = options.appId ? options.appId : null;
         this.baseURL = options.baseURL;
-        // console.log("APPID", options.appId, this.appId)
+        console.log("OPTIONS", options);
         // console.log("BASEURL", this.baseURL)
         var nhost = new NhostClient_1.default({
             baseURL: this.baseURL,
@@ -155,7 +155,7 @@ var HBPInstance = /** @class */ (function () {
             appId: this.appId,
             createStorage: options.createStorage,
             handleNotifications: options.handleNotifications,
-            publicVapidKey: options.publicVapidKey
+            publicVapidKey: options.publicVapidKey,
         });
         this.auth = nhost.auth;
         this.storage = nhost.storage;
@@ -243,7 +243,7 @@ var HBPInstance = /** @class */ (function () {
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/, {
                             error: error,
-                            data: data
+                            data: data,
                         }];
                 }
             });

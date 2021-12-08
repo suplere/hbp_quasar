@@ -3,7 +3,12 @@ import Auth from "./Auth";
 import Storage from "./Storage";
 import Notification from "./Notification";
 import NhostClient from "./NhostClient";
-import { UserConfig, JWTHasuraClaims, UserCredentials } from "./types";
+import {
+  UserConfig,
+  JWTHasuraClaims,
+  UserCredentials,
+  NHostConfig,
+} from "./types";
 
 function notAuthorized(): void {
     window.alert('You dont autorize to view this page.')
@@ -38,10 +43,10 @@ export class HBPInstance {
   notAuthorizedPath: string;
   afterLoginPath: string;
 
-  constructor(options: UserConfig, routerSettings: HBPRouterSettings = {}) {
+  constructor(options: NHostConfig, routerSettings: HBPRouterSettings = {}) {
     this.appId = options.appId ? options.appId : null;
     this.baseURL = options.baseURL;
-    // console.log("APPID", options.appId, this.appId)
+    console.log("OPTIONS", options);
     // console.log("BASEURL", this.baseURL)
     const nhost = new NhostClient({
       baseURL: this.baseURL,
@@ -50,11 +55,11 @@ export class HBPInstance {
       appId: this.appId,
       createStorage: options.createStorage,
       handleNotifications: options.handleNotifications,
-      publicVapidKey: options.publicVapidKey
+      publicVapidKey: options.publicVapidKey,
     });
     this.auth = nhost.auth;
     this.storage = nhost.storage;
-    this.notifications = nhost.notifications
+    this.notifications = nhost.notifications;
     this.claims = undefined;
     this.authenticated = false;
     this.token = "";
@@ -177,7 +182,7 @@ export class HBPInstance {
     }
     return {
       error,
-      data
+      data,
     };
   }
 

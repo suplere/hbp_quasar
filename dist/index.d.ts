@@ -1,7 +1,7 @@
 import Auth from "./Auth";
 import Storage from "./Storage";
 import Notification from "./Notification";
-import { UserConfig, JWTHasuraClaims } from "./types";
+import { UserConfig, JWTHasuraClaims, NHostConfig } from "./types";
 export interface HBPRouterSettings {
     notAuthorized?: () => void;
     notAuthenticated?: () => void;
@@ -25,7 +25,7 @@ export declare class HBPInstance {
     registerPath: string;
     notAuthorizedPath: string;
     afterLoginPath: string;
-    constructor(options: UserConfig, routerSettings?: HBPRouterSettings);
+    constructor(options: NHostConfig, routerSettings?: HBPRouterSettings);
     hasRole: (role: string) => boolean;
     handleOnAuthStateChanged: (status: boolean) => Promise<boolean>;
     routerInitApp: (to: any, from: any, next: any) => Promise<void>;
