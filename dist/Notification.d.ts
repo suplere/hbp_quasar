@@ -5,7 +5,6 @@ export default class Notification {
     private httpClient;
     private currentSession;
     private baseURL;
-    private currentUser;
     private currentSubscription;
     private loading;
     private appId;

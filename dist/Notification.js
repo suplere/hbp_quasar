@@ -46,7 +46,6 @@ var utils_1 = require("./utils");
 var Notification = /** @class */ (function () {
     function Notification(config, session) {
         var _this = this;
-        var _a;
         var baseURL = config.baseURL, appId = config.appId, publicVapidKey = config.publicVapidKey;
         this.currentSession = session;
         this.currentSubscription = null;
@@ -55,12 +54,11 @@ var Notification = /** @class */ (function () {
         this.publicVapidKey = publicVapidKey;
         this.loading = true;
         this.environment = EnvironmentInfoHelper_1.EnvironmentInfoHelper.getEnvironmentInfo();
-        console.log("THIS ENVIROMENT", this.environment);
+        // console.log("THIS ENVIROMENT", this.environment);
         this.httpClient = axios_1.default.create({
             baseURL: this.baseURL + "/notification",
             timeout: 10000,
         });
-        this.currentUser = (_a = this.currentSession.getSession()) === null || _a === void 0 ? void 0 : _a.user;
         this.getSubscription().then(function (subs) {
             _this.currentSubscription = subs;
         });

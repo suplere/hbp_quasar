@@ -1,6 +1,6 @@
 // Class for management notification settings - email + webpush
 
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosInstance } from "axios";
 import { EnvironmentInfoHelper } from './EnvironmentInfoHelper'
 import * as types from "./types";
 import UserSession from "./UserSession";
@@ -12,7 +12,6 @@ export default class Notification {
   private httpClient: AxiosInstance;
   private currentSession: UserSession;
   private baseURL: string;
-  private currentUser: types.User | null;
   private currentSubscription: PushSubscription | null;
   private loading: boolean;
   private appId: string | null;
@@ -31,14 +30,13 @@ export default class Notification {
 
     this.environment = EnvironmentInfoHelper.getEnvironmentInfo();
 
-    console.log("THIS ENVIROMENT", this.environment);
+    // console.log("THIS ENVIROMENT", this.environment);
 
     this.httpClient = axios.create({
       baseURL: `${this.baseURL}/notification`,
       timeout: 10000,
     });
 
-    this.currentUser = this.currentSession.getSession()?.user;
     this.getSubscription().then((subs: PushSubscription) => {
       this.currentSubscription = subs;
     });

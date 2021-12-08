@@ -46,7 +46,7 @@ export class HBPInstance {
   constructor(options: NHostConfig, routerSettings: HBPRouterSettings = {}) {
     this.appId = options.appId ? options.appId : null;
     this.baseURL = options.baseURL;
-    console.log("OPTIONS", options);
+    // console.log("OPTIONS", options);
     // console.log("BASEURL", this.baseURL)
     const nhost = new NhostClient({
       baseURL: this.baseURL,
