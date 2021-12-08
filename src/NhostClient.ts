@@ -26,6 +26,7 @@ export default class NhostClient {
     if (!config.baseURL)
       throw "Please specify a baseURL. More information at https://docs.nhost.io/libraries/nhost-js-sdk#setup.";
 
+    console.log("NHOST CONFIG", config)  
     this.baseURL = config.baseURL;
     this.appId = config.appId;
     this.ssr = config.ssr ?? typeof window === "undefined";
@@ -34,6 +35,9 @@ export default class NhostClient {
     this.createStorage = config.createStorage ?? true;
     this.handleNotifications = config.handleNotifications ?? true;
     this.publicVapidKey = config.publicVapidKey ? config.publicVapidKey : null
+
+    console.log("this.handleNotifications", this.handleNotifications);
+    console.log("this.publicVapidKey", this.publicVapidKey);
 
     this.session = new UserSession();
     // Default JWTExpiresIn is 15 minutes (900000 miliseconds)
@@ -73,7 +77,7 @@ export default class NhostClient {
       );
     }
 
-    if (this.handleNotifications && this.publicVapidKey) {
+    if (this.handleNotifications && this.publicVapidKey.length) {
       console.log("CREATE NOTIFICATION MODULE")
       this.notifications = new NhostNotification(
         {

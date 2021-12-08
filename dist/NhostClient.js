@@ -12,6 +12,7 @@ var NhostClient = /** @class */ (function () {
         var _a, _b, _c, _d, _e;
         if (!config.baseURL)
             throw "Please specify a baseURL. More information at https://docs.nhost.io/libraries/nhost-js-sdk#setup.";
+        console.log("NHOST CONFIG", config);
         this.baseURL = config.baseURL;
         this.appId = config.appId;
         this.ssr = (_a = config.ssr) !== null && _a !== void 0 ? _a : typeof window === "undefined";
@@ -20,6 +21,8 @@ var NhostClient = /** @class */ (function () {
         this.createStorage = (_d = config.createStorage) !== null && _d !== void 0 ? _d : true;
         this.handleNotifications = (_e = config.handleNotifications) !== null && _e !== void 0 ? _e : true;
         this.publicVapidKey = config.publicVapidKey ? config.publicVapidKey : null;
+        console.log("this.handleNotifications", this.handleNotifications);
+        console.log("this.publicVapidKey", this.publicVapidKey);
         this.session = new UserSession_1.default();
         // Default JWTExpiresIn is 15 minutes (900000 miliseconds)
         this.refreshIntervalTime = config.refreshIntervalTime || null;
@@ -47,7 +50,7 @@ var NhostClient = /** @class */ (function () {
                 appId: this.appId,
             }, this.session);
         }
-        if (this.handleNotifications && this.publicVapidKey) {
+        if (this.handleNotifications && this.publicVapidKey.length) {
             console.log("CREATE NOTIFICATION MODULE");
             this.notifications = new Notification_1.default({
                 baseURL: this.appId ? this.baseURL + "/custom" : this.baseURL,
