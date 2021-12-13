@@ -101,6 +101,22 @@ var Notification = /** @class */ (function () {
         return this.environment;
     };
     ;
+    Notification.prototype._generateHeaders = function () {
+        var _a;
+        return {
+            Authorization: "Bearer " + ((_a = this.currentSession.getSession()) === null || _a === void 0 ? void 0 : _a.jwt_token),
+        };
+    };
+    Notification.prototype.getEmailNotification = function () {
+        var _a;
+        if (!this.currentSession)
+            return [];
+        return this.httpClient.get("/getEmailNotifications", {
+            headers: {
+                Authorization: "Bearer " + ((_a = this.currentSession.getSession()) === null || _a === void 0 ? void 0 : _a.jwt_token),
+            },
+        });
+    };
     return Notification;
 }());
 exports.default = Notification;

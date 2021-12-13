@@ -75,11 +75,18 @@ export default class Notification {
     return this.environment;
   };
 
-  // private _generateHeaders(): null | types.Headers {
-  //   if (this.useCookies) return null;
+  private _generateHeaders(): null | types.Headers {
+    return {
+      Authorization: `Bearer ${this.currentSession.getSession()?.jwt_token}`,
+    };
+  }
 
-  //   return {
-  //     Authorization: `Bearer ${this.currentSession.getSession()?.jwt_token}`,
-  //   };
-  // }
+  public getEmailNotification() {
+    if (!this.currentSession) return []
+    return this.httpClient.get("/getEmailNotifications", {
+      headers: {
+        Authorization: `Bearer ${this.currentSession.getSession()?.jwt_token}`,
+      },
+    });
+  } 
 }
