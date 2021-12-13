@@ -753,6 +753,9 @@ var Auth = /** @class */ (function () {
         }
     };
     Auth.prototype.authStateChanged = function (state) {
+        if (this.parent) {
+            this.parent.notifications.getUserNotifications();
+        }
         for (var _i = 0, _a = this.authChangedFunctions; _i < _a.length; _i++) {
             var authChangedFunction = _a[_i];
             authChangedFunction(state);
@@ -772,9 +775,6 @@ var Auth = /** @class */ (function () {
                 this.currentUser = null;
                 this.loading = false;
                 this.authStateChanged(false);
-                if (this.parent) {
-                    this.parent.notifications.getUserNotifications();
-                }
                 return [2 /*return*/];
             });
         });
@@ -812,9 +812,6 @@ var Auth = /** @class */ (function () {
                                 _this.refreshIntervalSleepCheckLastSample = Date.now();
                             }, this.sampleRate);
                             this.authStateChanged(true);
-                        }
-                        if (this.parent) {
-                            this.parent.notifications.getUserNotifications();
                         }
                         this.loading = false;
                         return [2 /*return*/];

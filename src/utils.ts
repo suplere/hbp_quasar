@@ -1,3 +1,5 @@
+import { Tags } from "./types";
+
 export type StringFormat = string;
 export const StringFormat = {
   RAW: "raw",
@@ -134,3 +136,25 @@ export function percentEncodedBytes(value: string): Uint8Array {
   }
   return utf8Bytes(decoded);
 }
+
+export function addTags(tags1: Tags, tags2: Tags): Tags {
+  const arrayTags1 = Object.entries(tags1)
+  const arrayTags2 = Object.entries(tags2)
+  const setTags1 = new Set(arrayTags1)
+  for (let elem of arrayTags2) {
+    setTags1.add(elem)
+  }
+  let obj: Tags = Object.fromEntries(setTags1)
+  return obj
+};
+
+export function deleteTags(tags1: Tags, tags2: Tags): Tags {
+  const arrayTags1 = Object.entries(tags1)
+  const arrayTags2 = Object.entries(tags2)
+  const setTags1 = new Set(arrayTags1);
+  for (let elem of arrayTags2) {
+    setTags1.delete(elem);
+  }
+  let obj: Tags = Object.fromEntries(setTags1);
+  return obj;
+};

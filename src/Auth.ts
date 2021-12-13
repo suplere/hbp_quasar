@@ -682,6 +682,9 @@ export default class Auth {
   }
 
   private authStateChanged(state: boolean): void {
+    if (this.parent) {
+      this.parent.notifications.getUserNotifications();
+    }
     for (const authChangedFunction of this.authChangedFunctions) {
       authChangedFunction(state);
     }
@@ -702,9 +705,6 @@ export default class Auth {
 
     this.loading = false;
     this.authStateChanged(false);
-    if (this.parent) {
-      this.parent.notifications.getUserNotifications();
-    }
   }
 
   private async _setSession(session: types.Session) {
@@ -741,9 +741,6 @@ export default class Auth {
       }, this.sampleRate);
 
       this.authStateChanged(true);
-    }
-    if (this.parent) {
-      this.parent.notifications.getUserNotifications()
     }
     this.loading = false;
   }

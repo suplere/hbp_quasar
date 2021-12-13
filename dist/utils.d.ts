@@ -1,3 +1,4 @@
+import { Tags } from "./types";
 export declare type StringFormat = string;
 export declare const StringFormat: {
     RAW: string;
@@ -10,3 +11,5 @@ export declare function parseVersionString(version: string | number): number;
 export declare function base64Bytes(format: StringFormat, value: string): Uint8Array;
 export declare function utf8Bytes(value: string): Uint8Array;
 export declare function percentEncodedBytes(value: string): Uint8Array;
+export declare function addTags(tags1: Tags, tags2: Tags): Tags;
+export declare function deleteTags(tags1: Tags, tags2: Tags): Tags;

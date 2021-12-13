@@ -4,7 +4,7 @@ import axios, { AxiosInstance } from "axios";
 import { EnvironmentInfoHelper } from './EnvironmentInfoHelper'
 import * as types from "./types";
 import UserSession from "./UserSession";
-import { urlBase64ToUint8Array } from "./utils";
+import { addTags, deleteTags, urlBase64ToUint8Array } from "./utils";
 
 export type NotificationChangedFunction = (isSubscribed: boolean) => void;
 
@@ -45,7 +45,7 @@ export default class Notification {
       this.currentSubscription = subs;
     });
 
-    this.getUserNotifications()
+    this.getUserNotifications();
   }
 
   private async getSubscription(): Promise<null | PushSubscription> {
@@ -88,19 +88,19 @@ export default class Notification {
   }
 
   public getUserEmailNotification() {
-    return this.userEmailNotification
+    return this.userEmailNotification;
   }
 
   public getUserSubscriptions() {
-    return this.userSubscriptions
+    return this.userSubscriptions;
   }
 
   public getUserNotifications() {
     if (!this.currentSession.getSession()) {
-      this.userSubscriptions = []
-      this.userEmailNotification = null
-      return null
-    };
+      this.userSubscriptions = [];
+      this.userEmailNotification = null;
+      return null;
+    }
     return this.httpClient
       .get("/getUserNotifications", {
         headers: {
@@ -112,6 +112,145 @@ export default class Notification {
       .then((resp) => {
         this.userEmailNotification = resp.data.users_email;
         this.userSubscriptions = resp.data.webpushes;
+        return resp.data;
+      });
+  }
+
+  public setEmailNotification(tags: types.Tags = {}) {
+    if (this.userEmailNotification) return this.userEmailNotification;
+    const session = this.currentSession.getSession();
+    if (!session) {
+      this.userEmailNotification = null;
+      return null;
+    }
+    const user = session.user;
+    return this.httpClient
+      .post(
+        "/setUserEmailNotifications",
+        {
+          email: user.email,
+          tags,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session.jwt_token}`,
+          },
+        }
+      )
+      .then((resp) => {
+        this.userEmailNotification = resp.data;
+        return resp.data;
+      });
+  }
+
+  public deleteEmailNotification() {
+    if (!this.userEmailNotification) return null;
+    const session = this.currentSession.getSession();
+    if (!session) {
+      this.userEmailNotification = null;
+      return null;
+    }
+    const id = this.userEmailNotification.id;
+    return this.httpClient
+      .post(
+        "/deleteUserEmailNotifications",
+        {
+          id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session.jwt_token}`,
+          },
+        }
+      )
+      .then(() => {
+        this.userEmailNotification = null;
+        return null;
+      });
+  }
+
+  /* This overwrite all tags for current user */
+  public setTagsEmailNotification(tags: types.Tags = {}) {
+    if (!this.userEmailNotification) return null;
+    const session = this.currentSession.getSession();
+    if (!session) {
+      this.userEmailNotification = null;
+      return null;
+    }
+    const id = this.userEmailNotification.id;
+    return this.httpClient
+      .post(
+        "/setTagsUserEmailNotifications",
+        {
+          id,
+          tags,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session.jwt_token}`,
+          },
+        }
+      )
+      .then((resp) => {
+        this.userEmailNotification = resp.data;
+        return resp.data;
+      });
+  }
+
+  /* This add tags for current user */
+  public addTagsEmailNotification(tagsToAdd: types.Tags = {}) {
+    if (!this.userEmailNotification) return null;
+    const session = this.currentSession.getSession();
+    if (!session) {
+      this.userEmailNotification = null;
+      return null;
+    }
+    const id = this.userEmailNotification.id;
+    const tags = addTags(this.userEmailNotification.tags, tagsToAdd);
+    return this.httpClient
+      .post(
+        "/setTagsUserEmailNotifications",
+        {
+          id,
+          tags,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session.jwt_token}`,
+          },
+        }
+      )
+      .then((resp) => {
+        this.userEmailNotification = resp.data;
+        return resp.data;
+      });
+  }
+
+  /* This add tags for current user */
+  public deleteTagsEmailNotification(tagsToDelete: types.Tags = {}) {
+    if (!this.userEmailNotification) return null;
+    const session = this.currentSession.getSession();
+    if (!session) {
+      this.userEmailNotification = null;
+      return null;
+    }
+    const id = this.userEmailNotification.id;
+    const tags = deleteTags(this.userEmailNotification.tags, tagsToDelete);
+    return this.httpClient
+      .post(
+        "/setTagsUserEmailNotifications",
+        {
+          id,
+          tags,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session.jwt_token}`,
+          },
+        }
+      )
+      .then((resp) => {
+        this.userEmailNotification = resp.data;
         return resp.data;
       });
   }

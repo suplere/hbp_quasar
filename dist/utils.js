@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.percentEncodedBytes = exports.utf8Bytes = exports.base64Bytes = exports.parseVersionString = exports.urlBase64ToUint8Array = exports.StringFormat = void 0;
+exports.deleteTags = exports.addTags = exports.percentEncodedBytes = exports.utf8Bytes = exports.base64Bytes = exports.parseVersionString = exports.urlBase64ToUint8Array = exports.StringFormat = void 0;
 exports.StringFormat = {
     RAW: "raw",
     BASE64: "base64",
@@ -130,4 +130,30 @@ function percentEncodedBytes(value) {
     return utf8Bytes(decoded);
 }
 exports.percentEncodedBytes = percentEncodedBytes;
+function addTags(tags1, tags2) {
+    var arrayTags1 = Object.entries(tags1);
+    var arrayTags2 = Object.entries(tags2);
+    var setTags1 = new Set(arrayTags1);
+    for (var _i = 0, arrayTags2_1 = arrayTags2; _i < arrayTags2_1.length; _i++) {
+        var elem = arrayTags2_1[_i];
+        setTags1.add(elem);
+    }
+    var obj = Object.fromEntries(setTags1);
+    return obj;
+}
+exports.addTags = addTags;
+;
+function deleteTags(tags1, tags2) {
+    var arrayTags1 = Object.entries(tags1);
+    var arrayTags2 = Object.entries(tags2);
+    var setTags1 = new Set(arrayTags1);
+    for (var _i = 0, arrayTags2_2 = arrayTags2; _i < arrayTags2_2.length; _i++) {
+        var elem = arrayTags2_2[_i];
+        setTags1.delete(elem);
+    }
+    var obj = Object.fromEntries(setTags1);
+    return obj;
+}
+exports.deleteTags = deleteTags;
+;
 //# sourceMappingURL=utils.js.map

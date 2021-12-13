@@ -20,4 +20,9 @@ export default class Notification {
     getUserEmailNotification(): types.UserEmail;
     getUserSubscriptions(): [] | types.UserSubscription[];
     getUserNotifications(): Promise<any>;
+    setEmailNotification(tags?: types.Tags): Promise<any> | types.UserEmail;
+    deleteEmailNotification(): Promise<any>;
+    setTagsEmailNotification(tags?: types.Tags): Promise<any>;
+    addTagsEmailNotification(tagsToAdd?: types.Tags): Promise<any>;
+    deleteTagsEmailNotification(tagsToDelete?: types.Tags): Promise<any>;
 }

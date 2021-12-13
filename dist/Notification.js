@@ -123,7 +123,6 @@ var Notification = /** @class */ (function () {
             this.userEmailNotification = null;
             return null;
         }
-        ;
         return this.httpClient
             .get("/getUserNotifications", {
             headers: {
@@ -133,6 +132,134 @@ var Notification = /** @class */ (function () {
             .then(function (resp) {
             _this.userEmailNotification = resp.data.users_email;
             _this.userSubscriptions = resp.data.webpushes;
+            return resp.data;
+        });
+    };
+    Notification.prototype.setEmailNotification = function (tags) {
+        var _this = this;
+        if (tags === void 0) { tags = {}; }
+        if (this.userEmailNotification)
+            return this.userEmailNotification;
+        var session = this.currentSession.getSession();
+        if (!session) {
+            this.userEmailNotification = null;
+            return null;
+        }
+        var user = session.user;
+        return this.httpClient
+            .post("/setUserEmailNotifications", {
+            email: user.email,
+            tags: tags,
+        }, {
+            headers: {
+                Authorization: "Bearer " + session.jwt_token,
+            },
+        })
+            .then(function (resp) {
+            _this.userEmailNotification = resp.data;
+            return resp.data;
+        });
+    };
+    Notification.prototype.deleteEmailNotification = function () {
+        var _this = this;
+        if (!this.userEmailNotification)
+            return null;
+        var session = this.currentSession.getSession();
+        if (!session) {
+            this.userEmailNotification = null;
+            return null;
+        }
+        var id = this.userEmailNotification.id;
+        return this.httpClient
+            .post("/deleteUserEmailNotifications", {
+            id: id,
+        }, {
+            headers: {
+                Authorization: "Bearer " + session.jwt_token,
+            },
+        })
+            .then(function () {
+            _this.userEmailNotification = null;
+            return null;
+        });
+    };
+    /* This overwrite all tags for current user */
+    Notification.prototype.setTagsEmailNotification = function (tags) {
+        var _this = this;
+        if (tags === void 0) { tags = {}; }
+        if (!this.userEmailNotification)
+            return null;
+        var session = this.currentSession.getSession();
+        if (!session) {
+            this.userEmailNotification = null;
+            return null;
+        }
+        var id = this.userEmailNotification.id;
+        return this.httpClient
+            .post("/setTagsUserEmailNotifications", {
+            id: id,
+            tags: tags,
+        }, {
+            headers: {
+                Authorization: "Bearer " + session.jwt_token,
+            },
+        })
+            .then(function (resp) {
+            _this.userEmailNotification = resp.data;
+            return resp.data;
+        });
+    };
+    /* This add tags for current user */
+    Notification.prototype.addTagsEmailNotification = function (tagsToAdd) {
+        var _this = this;
+        if (tagsToAdd === void 0) { tagsToAdd = {}; }
+        if (!this.userEmailNotification)
+            return null;
+        var session = this.currentSession.getSession();
+        if (!session) {
+            this.userEmailNotification = null;
+            return null;
+        }
+        var id = this.userEmailNotification.id;
+        var tags = (0, utils_1.addTags)(this.userEmailNotification.tags, tagsToAdd);
+        return this.httpClient
+            .post("/setTagsUserEmailNotifications", {
+            id: id,
+            tags: tags,
+        }, {
+            headers: {
+                Authorization: "Bearer " + session.jwt_token,
+            },
+        })
+            .then(function (resp) {
+            _this.userEmailNotification = resp.data;
+            return resp.data;
+        });
+    };
+    /* This add tags for current user */
+    Notification.prototype.deleteTagsEmailNotification = function (tagsToDelete) {
+        var _this = this;
+        if (tagsToDelete === void 0) { tagsToDelete = {}; }
+        if (!this.userEmailNotification)
+            return null;
+        var session = this.currentSession.getSession();
+        if (!session) {
+            this.userEmailNotification = null;
+            return null;
+        }
+        var id = this.userEmailNotification.id;
+        var tags = (0, utils_1.deleteTags)(this.userEmailNotification.tags, tagsToDelete);
+        return this.httpClient
+            .post("/setTagsUserEmailNotifications", {
+            id: id,
+            tags: tags,
+        }, {
+            headers: {
+                Authorization: "Bearer " + session.jwt_token,
+            },
+        })
+            .then(function (resp) {
+            _this.userEmailNotification = resp.data;
             return resp.data;
         });
     };
