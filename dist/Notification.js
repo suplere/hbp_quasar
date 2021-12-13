@@ -49,6 +49,8 @@ var Notification = /** @class */ (function () {
         var baseURL = config.baseURL, appId = config.appId, publicVapidKey = config.publicVapidKey;
         this.currentSession = session;
         this.currentSubscription = null;
+        this.userEmailNotification = null;
+        this.userSubscriptions = [];
         this.appId = appId;
         this.baseURL = baseURL;
         this.publicVapidKey = publicVapidKey;
@@ -62,6 +64,7 @@ var Notification = /** @class */ (function () {
         this.getSubscription().then(function (subs) {
             _this.currentSubscription = subs;
         });
+        this.getUserNotifications();
     }
     Notification.prototype.getSubscription = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -100,24 +103,36 @@ var Notification = /** @class */ (function () {
     Notification.prototype.getEnvironment = function () {
         return this.environment;
     };
-    ;
     Notification.prototype._generateHeaders = function () {
         var _a;
         return {
             Authorization: "Bearer " + ((_a = this.currentSession.getSession()) === null || _a === void 0 ? void 0 : _a.jwt_token),
         };
     };
+    Notification.prototype.getUserEmailNotification = function () {
+        return this.userEmailNotification;
+    };
+    Notification.prototype.getUserSubscriptions = function () {
+        return this.userSubscriptions;
+    };
     Notification.prototype.getUserNotifications = function () {
+        var _this = this;
         var _a;
-        if (!this.currentSession.getSession().jwt_token)
-            return [];
-        return this.httpClient.get("/getUserNotifications", {
+        if (!this.currentSession.getSession()) {
+            this.userSubscriptions = [];
+            this.userEmailNotification = null;
+            return null;
+        }
+        ;
+        return this.httpClient
+            .get("/getUserNotifications", {
             headers: {
                 Authorization: "Bearer " + ((_a = this.currentSession.getSession()) === null || _a === void 0 ? void 0 : _a.jwt_token),
             },
         })
             .then(function (resp) {
-            console.log(resp);
+            _this.userEmailNotification = resp.data.users_email;
+            _this.userSubscriptions = resp.data.webpushes;
             return resp.data;
         });
     };

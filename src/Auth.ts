@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import queryString from "query-string";
+import NhostClient from "./NhostClient";
 import * as types from "./types";
 import UserSession from "./UserSession";
 
@@ -26,8 +27,13 @@ export default class Auth {
   private refreshIntervalSleepCheckLastSample: number;
   private sampleRate: number;
   private appId: string | null;
+  private parent: NhostClient;
 
-  constructor(config: types.AuthConfig, session: UserSession) {
+  constructor(
+    config: types.AuthConfig,
+    session: UserSession,
+    parent: NhostClient
+  ) {
     const {
       baseURL,
       useCookies,
@@ -39,6 +45,7 @@ export default class Auth {
       appId,
     } = config;
 
+    this.parent = parent
     this.useCookies = useCookies;
     this.refreshIntervalTime = refreshIntervalTime;
     this.clientStorage = clientStorage;
@@ -596,22 +603,21 @@ export default class Auth {
           ...this.generateApplicationIdHeader(),
         },
       };
-    const token = this.currentSession.getSession()?.jwt_token
+    const token = this.currentSession.getSession()?.jwt_token;
     if (token) {
       return {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        ...this.generateApplicationIdHeader(),
-      },
-    };
+        headers: {
+          Authorization: `Bearer ${token}`,
+          ...this.generateApplicationIdHeader(),
+        },
+      };
     } else {
       return {
         headers: {
           ...this.generateApplicationIdHeader(),
         },
       };
-    } 
-    
+    }
   }
 
   private _autoLogin(refreshToken: string | null): void {
@@ -696,6 +702,9 @@ export default class Auth {
 
     this.loading = false;
     this.authStateChanged(false);
+    if (this.parent) {
+      this.parent.notifications.getUserNotifications();
+    }
   }
 
   private async _setSession(session: types.Session) {
@@ -733,7 +742,9 @@ export default class Auth {
 
       this.authStateChanged(true);
     }
-
+    if (this.parent) {
+      this.parent.notifications.getUserNotifications()
+    }
     this.loading = false;
   }
 }

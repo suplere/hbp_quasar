@@ -41,7 +41,7 @@ var NhostClient = /** @class */ (function () {
             ssr: this.ssr,
             autoLogin: this.autoLogin,
             appId: this.appId,
-        }, this.session);
+        }, this.session, this);
         // this.auth = new NhostAuth(authConfig, this.session);
         if (this.createStorage) {
             this.storage = new Storage_1.default({

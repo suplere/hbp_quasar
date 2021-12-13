@@ -62,7 +62,8 @@ export default class NhostClient {
         autoLogin: this.autoLogin,
         appId: this.appId,
       },
-      this.session
+      this.session,
+      this
     );
     // this.auth = new NhostAuth(authConfig, this.session);
 

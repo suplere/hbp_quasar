@@ -53,8 +53,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var axios_1 = __importDefault(require("axios"));
 var query_string_1 = __importDefault(require("query-string"));
 var Auth = /** @class */ (function () {
-    function Auth(config, session) {
+    function Auth(config, session, parent) {
         var baseURL = config.baseURL, useCookies = config.useCookies, refreshIntervalTime = config.refreshIntervalTime, clientStorage = config.clientStorage, clientStorageType = config.clientStorageType, ssr = config.ssr, autoLogin = config.autoLogin, appId = config.appId;
+        this.parent = parent;
         this.useCookies = useCookies;
         this.refreshIntervalTime = refreshIntervalTime;
         this.clientStorage = clientStorage;
@@ -771,6 +772,9 @@ var Auth = /** @class */ (function () {
                 this.currentUser = null;
                 this.loading = false;
                 this.authStateChanged(false);
+                if (this.parent) {
+                    this.parent.notifications.getUserNotifications();
+                }
                 return [2 /*return*/];
             });
         });
@@ -808,6 +812,9 @@ var Auth = /** @class */ (function () {
                                 _this.refreshIntervalSleepCheckLastSample = Date.now();
                             }, this.sampleRate);
                             this.authStateChanged(true);
+                        }
+                        if (this.parent) {
+                            this.parent.notifications.getUserNotifications();
                         }
                         this.loading = false;
                         return [2 /*return*/];

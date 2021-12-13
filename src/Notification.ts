@@ -17,11 +17,15 @@ export default class Notification {
   private appId: string | null;
   private publicVapidKey: string;
   private environment: types.EnvironmentInfo;
+  private userEmailNotification: types.UserEmail | null;
+  private userSubscriptions: types.UserSubscription[] | [];
 
   constructor(config: types.NotificationConfig, session: UserSession) {
     const { baseURL, appId, publicVapidKey } = config;
     this.currentSession = session;
-    this.currentSubscription = null; 
+    this.currentSubscription = null;
+    this.userEmailNotification = null;
+    this.userSubscriptions = [];
     this.appId = appId;
 
     this.baseURL = baseURL;
@@ -40,6 +44,8 @@ export default class Notification {
     this.getSubscription().then((subs: PushSubscription) => {
       this.currentSubscription = subs;
     });
+
+    this.getUserNotifications()
   }
 
   private async getSubscription(): Promise<null | PushSubscription> {
@@ -73,7 +79,7 @@ export default class Notification {
 
   public getEnvironment(): types.EnvironmentInfo {
     return this.environment;
-  };
+  }
 
   private _generateHeaders(): null | types.Headers {
     return {
@@ -81,16 +87,32 @@ export default class Notification {
     };
   }
 
+  public getUserEmailNotification() {
+    return this.userEmailNotification
+  }
+
+  public getUserSubscriptions() {
+    return this.userSubscriptions
+  }
+
   public getUserNotifications() {
-    if (!this.currentSession.getSession().jwt_token) return []
-    return this.httpClient.get("/getUserNotifications", {
-      headers: {
-        Authorization: `Bearer ${this.currentSession.getSession()?.jwt_token}`,
-      },
-    })
-    .then(resp => {
-      console.log(resp)
-      return resp.data
-    });
-  } 
+    if (!this.currentSession.getSession()) {
+      this.userSubscriptions = []
+      this.userEmailNotification = null
+      return null
+    };
+    return this.httpClient
+      .get("/getUserNotifications", {
+        headers: {
+          Authorization: `Bearer ${
+            this.currentSession.getSession()?.jwt_token
+          }`,
+        },
+      })
+      .then((resp) => {
+        this.userEmailNotification = resp.data.users_email;
+        this.userSubscriptions = resp.data.webpushes;
+        return resp.data;
+      });
+  }
 }

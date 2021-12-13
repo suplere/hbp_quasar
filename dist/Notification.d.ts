@@ -10,10 +10,14 @@ export default class Notification {
     private appId;
     private publicVapidKey;
     private environment;
+    private userEmailNotification;
+    private userSubscriptions;
     constructor(config: types.NotificationConfig, session: UserSession);
     private getSubscription;
     getCurrentSubscription(): PushSubscription | null;
     getEnvironment(): types.EnvironmentInfo;
     private _generateHeaders;
-    getUserNotifications(): any[] | Promise<any>;
+    getUserEmailNotification(): types.UserEmail;
+    getUserSubscriptions(): [] | types.UserSubscription[];
+    getUserNotifications(): Promise<any>;
 }

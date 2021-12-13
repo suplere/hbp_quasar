@@ -166,10 +166,21 @@ export interface EnvironmentInfo {
     canTalkToServiceWorker: boolean;
 }
 
+export interface Tags {
+  [key: string]: string | number | boolean;
+}
+
 export interface UserSubscription {
   id: string;
   subscription: Subscription;
   enviromentInfo?: EnvironmentInfo;
-  tags?: string[];
+  tags?: Tags;
+  segments?: string[];
+}
+
+export interface UserEmail {
+  id: string;
+  email: string;
+  tags?: Tags;
   segments?: string[];
 }

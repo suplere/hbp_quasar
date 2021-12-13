@@ -1,3 +1,4 @@
+import NhostClient from "./NhostClient";
 import * as types from "./types";
 import UserSession from "./UserSession";
 export declare type AuthChangedFunction = (isAuthenticated: boolean) => void;
@@ -20,7 +21,8 @@ export default class Auth {
     private refreshIntervalSleepCheckLastSample;
     private sampleRate;
     private appId;
-    constructor(config: types.AuthConfig, session: UserSession);
+    private parent;
+    constructor(config: types.AuthConfig, session: UserSession, parent: NhostClient);
     private generateApplicationIdHeader;
     user(): types.User | null;
     register({ email, password, options, }: types.UserCredentials): Promise<{
