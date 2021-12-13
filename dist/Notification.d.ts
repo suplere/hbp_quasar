@@ -15,5 +15,5 @@ export default class Notification {
     getCurrentSubscription(): PushSubscription | null;
     getEnvironment(): types.EnvironmentInfo;
     private _generateHeaders;
-    getEmailNotification(): any[] | Promise<import("axios").AxiosResponse<any, any>>;
+    getUserNotifications(): any[] | Promise<any>;
 }

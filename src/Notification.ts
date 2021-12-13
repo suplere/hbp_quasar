@@ -81,12 +81,16 @@ export default class Notification {
     };
   }
 
-  public getEmailNotification() {
-    if (!this.currentSession) return []
-    return this.httpClient.get("/getEmailNotifications", {
+  public getUserNotifications() {
+    if (!this.currentSession.getSession().jwt_token) return []
+    return this.httpClient.get("/getUserNotifications", {
       headers: {
         Authorization: `Bearer ${this.currentSession.getSession()?.jwt_token}`,
       },
+    })
+    .then(resp => {
+      console.log(resp)
+      return resp.data
     });
   } 
 }

@@ -107,14 +107,18 @@ var Notification = /** @class */ (function () {
             Authorization: "Bearer " + ((_a = this.currentSession.getSession()) === null || _a === void 0 ? void 0 : _a.jwt_token),
         };
     };
-    Notification.prototype.getEmailNotification = function () {
+    Notification.prototype.getUserNotifications = function () {
         var _a;
-        if (!this.currentSession)
+        if (!this.currentSession.getSession().jwt_token)
             return [];
-        return this.httpClient.get("/getEmailNotifications", {
+        return this.httpClient.get("/getUserNotifications", {
             headers: {
                 Authorization: "Bearer " + ((_a = this.currentSession.getSession()) === null || _a === void 0 ? void 0 : _a.jwt_token),
             },
+        })
+            .then(function (resp) {
+            console.log(resp);
+            return resp.data;
         });
     };
     return Notification;
