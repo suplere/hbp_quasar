@@ -149,12 +149,12 @@ export function addTags(tags1: Tags, tags2: Tags): Tags {
 };
 
 export function deleteTags(tags1: Tags, tags2: Tags): Tags {
-  const arrayTags1 = Object.entries(tags1)
-  const arrayTags2 = Object.entries(tags2)
-  const setTags1 = new Set(arrayTags1);
-  for (let elem of arrayTags2) {
-    setTags1.delete(elem);
-  }
-  let obj: Tags = Object.fromEntries(setTags1);
-  return obj;
+  let diff = Object.keys(tags1).reduce((diff, key) => {
+    if (tags1[key] === tags2[key]) return diff;
+    return {
+      ...diff,
+      [key]: tags1[key],
+    };
+  }, {});
+  return diff;
 };

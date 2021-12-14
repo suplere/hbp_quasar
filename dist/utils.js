@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteTags = exports.addTags = exports.percentEncodedBytes = exports.utf8Bytes = exports.base64Bytes = exports.parseVersionString = exports.urlBase64ToUint8Array = exports.StringFormat = void 0;
 exports.StringFormat = {
@@ -144,15 +155,13 @@ function addTags(tags1, tags2) {
 exports.addTags = addTags;
 ;
 function deleteTags(tags1, tags2) {
-    var arrayTags1 = Object.entries(tags1);
-    var arrayTags2 = Object.entries(tags2);
-    var setTags1 = new Set(arrayTags1);
-    for (var _i = 0, arrayTags2_2 = arrayTags2; _i < arrayTags2_2.length; _i++) {
-        var elem = arrayTags2_2[_i];
-        setTags1.delete(elem);
-    }
-    var obj = Object.fromEntries(setTags1);
-    return obj;
+    var diff = Object.keys(tags1).reduce(function (diff, key) {
+        var _a;
+        if (tags1[key] === tags2[key])
+            return diff;
+        return __assign(__assign({}, diff), (_a = {}, _a[key] = tags1[key], _a));
+    }, {});
+    return diff;
 }
 exports.deleteTags = deleteTags;
 ;
