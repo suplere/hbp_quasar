@@ -379,6 +379,7 @@ export default class Auth {
   public async requestPasswordChange(email: string): Promise<void> {
     const data = {
       email,
+      app_id: this.appId,
     };
 
     // if (this.appId) data["app_id"] = this.appId;

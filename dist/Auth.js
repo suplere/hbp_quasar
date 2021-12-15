@@ -393,6 +393,7 @@ var Auth = /** @class */ (function () {
                     case 0:
                         data = {
                             email: email,
+                            app_id: this.appId,
                         };
                         // if (this.appId) data["app_id"] = this.appId;
                         return [4 /*yield*/, this.httpClient.post("/change-password/request", __assign({}, data), this._generateAxiosHeaderConfig())];
