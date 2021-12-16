@@ -112,8 +112,14 @@ var Notification = /** @class */ (function () {
     Notification.prototype.getUserEmailNotification = function () {
         return this.userEmailNotification;
     };
-    Notification.prototype.getUserSubscriptions = function () {
-        return this.userSubscriptions;
+    Notification.prototype.getUserSubscription = function () {
+        return this.activeSubscription;
+    };
+    Notification.prototype.getEmailTags = function () {
+        return this.userEmailNotification ? this.userEmailNotification.tags : null;
+    };
+    Notification.prototype.getWebPusTags = function () {
+        return this.activeSubscription ? this.activeSubscription.tags : null;
     };
     Notification.prototype.getUserNotifications = function () {
         var _this = this;
@@ -132,6 +138,41 @@ var Notification = /** @class */ (function () {
             .then(function (resp) {
             _this.userEmailNotification = resp.data.users_email;
             _this.userSubscriptions = resp.data.webpushes;
+            if (_this.currentSubscription) {
+                _this.activeSubscription = _this.userSubscriptions.find(function (us) {
+                    return us.subscription.endpoint === _this.currentSubscription.endpoint;
+                });
+            }
+            else {
+                _this.activeSubscription = null;
+            }
+            return resp.data;
+        });
+    };
+    Notification.prototype.setWebPushNotification = function (tags) {
+        var _this = this;
+        if (tags === void 0) { tags = {}; }
+        if (!this.currentSubscription)
+            return null;
+        if (this.activeSubscription)
+            return this.activeSubscription;
+        var session = this.currentSession.getSession();
+        if (!session) {
+            this.activeSubscription = null;
+            return null;
+        }
+        return this.httpClient
+            .post("/setUserWebPushNotifications", {
+            subscription: this.currentSubscription,
+            enviromentInfo: this.environment,
+            tags: tags,
+        }, {
+            headers: {
+                Authorization: "Bearer " + session.jwt_token,
+            },
+        })
+            .then(function (resp) {
+            _this.activeSubscription = resp.data;
             return resp.data;
         });
     };
@@ -160,6 +201,29 @@ var Notification = /** @class */ (function () {
             return resp.data;
         });
     };
+    Notification.prototype.deleteWebPushNotification = function () {
+        var _this = this;
+        if (!this.activeSubscription)
+            return null;
+        var session = this.currentSession.getSession();
+        if (!session) {
+            this.activeSubscription = null;
+            return null;
+        }
+        var id = this.activeSubscription.id;
+        return this.httpClient
+            .post("/deleteUserWebPushNotifications", {
+            id: id,
+        }, {
+            headers: {
+                Authorization: "Bearer " + session.jwt_token,
+            },
+        })
+            .then(function () {
+            _this.activeSubscription = null;
+            return null;
+        });
+    };
     Notification.prototype.deleteEmailNotification = function () {
         var _this = this;
         if (!this.userEmailNotification)
@@ -181,6 +245,32 @@ var Notification = /** @class */ (function () {
             .then(function () {
             _this.userEmailNotification = null;
             return null;
+        });
+    };
+    /* This overwrite all tags for current user */
+    Notification.prototype.setTagsWebPushNotification = function (tags) {
+        var _this = this;
+        if (tags === void 0) { tags = {}; }
+        if (!this.activeSubscription)
+            return null;
+        var session = this.currentSession.getSession();
+        if (!session) {
+            this.activeSubscription = null;
+            return null;
+        }
+        var id = this.activeSubscription.id;
+        return this.httpClient
+            .post("/setTagsUserWebPushNotifications", {
+            id: id,
+            tags: tags,
+        }, {
+            headers: {
+                Authorization: "Bearer " + session.jwt_token,
+            },
+        })
+            .then(function (resp) {
+            _this.activeSubscription = resp.data;
+            return resp.data;
         });
     };
     /* This overwrite all tags for current user */
@@ -210,6 +300,33 @@ var Notification = /** @class */ (function () {
         });
     };
     /* This add tags for current user */
+    Notification.prototype.addTagsWebPushNotification = function (tagsToAdd) {
+        var _this = this;
+        if (tagsToAdd === void 0) { tagsToAdd = {}; }
+        if (!this.activeSubscription)
+            return null;
+        var session = this.currentSession.getSession();
+        if (!session) {
+            this.activeSubscription = null;
+            return null;
+        }
+        var id = this.activeSubscription.id;
+        var tags = (0, utils_1.addTags)(this.activeSubscription.tags, tagsToAdd);
+        return this.httpClient
+            .post("/setTagsUserWebPushNotifications", {
+            id: id,
+            tags: tags,
+        }, {
+            headers: {
+                Authorization: "Bearer " + session.jwt_token,
+            },
+        })
+            .then(function (resp) {
+            _this.activeSubscription = resp.data;
+            return resp.data;
+        });
+    };
+    /* This add tags for current user */
     Notification.prototype.addTagsEmailNotification = function (tagsToAdd) {
         var _this = this;
         if (tagsToAdd === void 0) { tagsToAdd = {}; }
@@ -233,6 +350,33 @@ var Notification = /** @class */ (function () {
         })
             .then(function (resp) {
             _this.userEmailNotification = resp.data;
+            return resp.data;
+        });
+    };
+    /* This add tags for current user */
+    Notification.prototype.deleteTagsWebPushNotification = function (tagsToDelete) {
+        var _this = this;
+        if (tagsToDelete === void 0) { tagsToDelete = {}; }
+        if (!this.activeSubscription)
+            return null;
+        var session = this.currentSession.getSession();
+        if (!session) {
+            this.activeSubscription = null;
+            return null;
+        }
+        var id = this.activeSubscription.id;
+        var tags = (0, utils_1.deleteTags)(this.activeSubscription.tags, tagsToDelete);
+        return this.httpClient
+            .post("/setTagsUserWebPushNotifications", {
+            id: id,
+            tags: tags,
+        }, {
+            headers: {
+                Authorization: "Bearer " + session.jwt_token,
+            },
+        })
+            .then(function (resp) {
+            _this.activeSubscription = resp.data;
             return resp.data;
         });
     };
