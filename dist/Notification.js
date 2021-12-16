@@ -100,6 +100,9 @@ var Notification = /** @class */ (function () {
     Notification.prototype.getCurrentSubscription = function () {
         return this.currentSubscription;
     };
+    Notification.prototype.isReadyForWebPush = function () {
+        return this.currentSubscription ? true : false;
+    };
     Notification.prototype.getEnvironment = function () {
         return this.environment;
     };

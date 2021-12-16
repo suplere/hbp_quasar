@@ -16,6 +16,7 @@ export default class Notification {
     constructor(config: types.NotificationConfig, session: UserSession);
     private getSubscription;
     getCurrentSubscription(): PushSubscription | null;
+    isReadyForWebPush(): boolean;
     getEnvironment(): types.EnvironmentInfo;
     private _generateHeaders;
     getUserEmailNotification(): types.UserEmail | null;

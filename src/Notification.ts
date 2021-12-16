@@ -79,6 +79,10 @@ export default class Notification {
     return this.currentSubscription;
   }
 
+  public isReadyForWebPush(): boolean {
+    return this.currentSubscription ? true : false
+  }
+
   public getEnvironment(): types.EnvironmentInfo {
     return this.environment;
   }
