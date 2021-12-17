@@ -50,7 +50,7 @@ var Notification = /** @class */ (function () {
         this.currentSession = session;
         this.currentSubscription = null;
         this.userEmailNotification = null;
-        this.userSubscriptions = [];
+        this.userSubscriptions = null;
         this.appId = appId;
         this.baseURL = baseURL;
         this.publicVapidKey = publicVapidKey;
@@ -176,6 +176,7 @@ var Notification = /** @class */ (function () {
         })
             .then(function (resp) {
             _this.activeSubscription = resp.data;
+            _this.userSubscriptions.push(_this.activeSubscription);
             return resp.data;
         });
     };
@@ -222,7 +223,9 @@ var Notification = /** @class */ (function () {
                 Authorization: "Bearer " + session.jwt_token,
             },
         })
-            .then(function () {
+            .then(function (resp) {
+            var id = resp.data.id;
+            _this.userSubscriptions = _this.userSubscriptions.filter(function (us) { return us.id !== id; });
             _this.activeSubscription = null;
             return null;
         });
@@ -272,6 +275,9 @@ var Notification = /** @class */ (function () {
             },
         })
             .then(function (resp) {
+            var id = resp.data.id;
+            _this.userSubscriptions = _this.userSubscriptions.filter(function (us) { return us.id !== id; });
+            _this.userSubscriptions.push(resp.data);
             _this.activeSubscription = resp.data;
             return resp.data;
         });
@@ -325,6 +331,9 @@ var Notification = /** @class */ (function () {
             },
         })
             .then(function (resp) {
+            var id = resp.data.id;
+            _this.userSubscriptions = _this.userSubscriptions.filter(function (us) { return us.id !== id; });
+            _this.userSubscriptions.push(resp.data);
             _this.activeSubscription = resp.data;
             return resp.data;
         });
@@ -379,6 +388,9 @@ var Notification = /** @class */ (function () {
             },
         })
             .then(function (resp) {
+            var id = resp.data.id;
+            _this.userSubscriptions = _this.userSubscriptions.filter(function (us) { return us.id !== id; });
+            _this.userSubscriptions.push(resp.data);
             _this.activeSubscription = resp.data;
             return resp.data;
         });

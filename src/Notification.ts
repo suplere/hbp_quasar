@@ -18,7 +18,7 @@ export default class Notification {
   private publicVapidKey: string;
   private environment: types.EnvironmentInfo;
   private userEmailNotification: types.UserEmail | null;
-  private userSubscriptions: types.UserSubscription[] | [];
+  private userSubscriptions: types.UserSubscription[] | null;
   private activeSubscription: types.UserSubscription;
 
   constructor(config: types.NotificationConfig, session: UserSession) {
@@ -27,7 +27,7 @@ export default class Notification {
     this.currentSubscription = null;
 
     this.userEmailNotification = null;
-    this.userSubscriptions = [];
+    this.userSubscriptions = null;
     this.appId = appId;
 
     this.baseURL = baseURL;
@@ -165,6 +165,7 @@ export default class Notification {
       )
       .then((resp) => {
         this.activeSubscription = resp.data;
+        this.userSubscriptions.push(this.activeSubscription);
         return resp.data;
       });
   }
@@ -216,7 +217,9 @@ export default class Notification {
           },
         }
       )
-      .then(() => {
+      .then((resp) => {
+        const id = resp.data.id
+        this.userSubscriptions = this.userSubscriptions.filter(us => us.id !== id)
         this.activeSubscription = null;
         return null;
       });
@@ -271,6 +274,11 @@ export default class Notification {
         }
       )
       .then((resp) => {
+        const id = resp.data.id;
+        this.userSubscriptions = this.userSubscriptions.filter(
+          (us) => us.id !== id
+        );
+        this.userSubscriptions.push(resp.data);
         this.activeSubscription = resp.data;
         return resp.data;
       });
@@ -328,6 +336,11 @@ export default class Notification {
         }
       )
       .then((resp) => {
+        const id = resp.data.id;
+        this.userSubscriptions = this.userSubscriptions.filter(
+          (us) => us.id !== id
+        );
+        this.userSubscriptions.push(resp.data);
         this.activeSubscription = resp.data;
         return resp.data;
       });
@@ -386,6 +399,11 @@ export default class Notification {
         }
       )
       .then((resp) => {
+        const id = resp.data.id;
+        this.userSubscriptions = this.userSubscriptions.filter(
+          (us) => us.id !== id
+        );
+        this.userSubscriptions.push(resp.data);
         this.activeSubscription = resp.data;
         return resp.data;
       });
