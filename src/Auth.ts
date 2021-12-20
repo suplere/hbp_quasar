@@ -683,7 +683,7 @@ export default class Auth {
   }
 
   private authStateChanged(state: boolean): void {
-    if (this.parent) {
+    if (this.parent && this.parent.notifications) {
       this.parent.notifications.getUserNotifications();
     }
     for (const authChangedFunction of this.authChangedFunctions) {

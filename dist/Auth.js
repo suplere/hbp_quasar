@@ -754,7 +754,7 @@ var Auth = /** @class */ (function () {
         }
     };
     Auth.prototype.authStateChanged = function (state) {
-        if (this.parent) {
+        if (this.parent && this.parent.notifications) {
             this.parent.notifications.getUserNotifications();
         }
         for (var _i = 0, _a = this.authChangedFunctions; _i < _a.length; _i++) {
