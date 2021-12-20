@@ -1,4 +1,4 @@
-import * as Bowser from "bowser";
+import Bowser from "bowser";
 import { Browser, EnvironmentInfo } from "./types";
 import { parseVersionString } from "./utils";
 
