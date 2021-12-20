@@ -1,5 +1,16 @@
 "use strict";
 // Class for management notification settings - email + webpush
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -66,6 +77,16 @@ var Notification = /** @class */ (function () {
         });
         this.getUserNotifications();
     }
+    Notification.prototype.generateApplicationIdHeader = function () {
+        if (this.appId) {
+            return {
+                ApplicationId: "" + this.appId,
+            };
+        }
+        else {
+            return null;
+        }
+    };
     Notification.prototype.getSubscription = function () {
         return __awaiter(this, void 0, void 0, function () {
             var registration, subscription;
@@ -112,6 +133,20 @@ var Notification = /** @class */ (function () {
             Authorization: "Bearer " + ((_a = this.currentSession.getSession()) === null || _a === void 0 ? void 0 : _a.jwt_token),
         };
     };
+    Notification.prototype._generateAxiosHeaderConfig = function () {
+        var _a;
+        var token = (_a = this.currentSession.getSession()) === null || _a === void 0 ? void 0 : _a.jwt_token;
+        if (token) {
+            return {
+                headers: __assign({ Authorization: "Bearer " + token }, this.generateApplicationIdHeader()),
+            };
+        }
+        else {
+            return {
+                headers: __assign({}, this.generateApplicationIdHeader()),
+            };
+        }
+    };
     Notification.prototype.getUserEmailNotification = function () {
         return this.userEmailNotification;
     };
@@ -126,18 +161,13 @@ var Notification = /** @class */ (function () {
     };
     Notification.prototype.getUserNotifications = function () {
         var _this = this;
-        var _a;
         if (!this.currentSession.getSession()) {
             this.userSubscriptions = [];
             this.userEmailNotification = null;
             return null;
         }
         return this.httpClient
-            .get("/getUserNotifications", {
-            headers: {
-                Authorization: "Bearer " + ((_a = this.currentSession.getSession()) === null || _a === void 0 ? void 0 : _a.jwt_token),
-            },
-        })
+            .get("/getUserNotifications", this._generateAxiosHeaderConfig())
             .then(function (resp) {
             _this.userEmailNotification = resp.data.users_email;
             _this.userSubscriptions = resp.data.webpushes;
@@ -169,11 +199,7 @@ var Notification = /** @class */ (function () {
             subscription: this.currentSubscription,
             enviromentInfo: this.environment,
             tags: tags,
-        }, {
-            headers: {
-                Authorization: "Bearer " + session.jwt_token,
-            },
-        })
+        }, this._generateAxiosHeaderConfig())
             .then(function (resp) {
             _this.activeSubscription = resp.data;
             _this.userSubscriptions.push(_this.activeSubscription);
@@ -195,11 +221,7 @@ var Notification = /** @class */ (function () {
             .post("/setUserEmailNotifications", {
             email: user.email,
             tags: tags,
-        }, {
-            headers: {
-                Authorization: "Bearer " + session.jwt_token,
-            },
-        })
+        }, this._generateAxiosHeaderConfig())
             .then(function (resp) {
             _this.userEmailNotification = resp.data;
             return resp.data;
@@ -218,11 +240,7 @@ var Notification = /** @class */ (function () {
         return this.httpClient
             .post("/deleteUserWebPushNotifications", {
             id: id,
-        }, {
-            headers: {
-                Authorization: "Bearer " + session.jwt_token,
-            },
-        })
+        }, this._generateAxiosHeaderConfig())
             .then(function (resp) {
             var id = resp.data.id;
             _this.userSubscriptions = _this.userSubscriptions.filter(function (us) { return us.id !== id; });
@@ -243,11 +261,7 @@ var Notification = /** @class */ (function () {
         return this.httpClient
             .post("/deleteUserEmailNotifications", {
             id: id,
-        }, {
-            headers: {
-                Authorization: "Bearer " + session.jwt_token,
-            },
-        })
+        }, this._generateAxiosHeaderConfig())
             .then(function () {
             _this.userEmailNotification = null;
             return null;
@@ -269,11 +283,7 @@ var Notification = /** @class */ (function () {
             .post("/setTagsUserWebPushNotifications", {
             id: id,
             tags: tags,
-        }, {
-            headers: {
-                Authorization: "Bearer " + session.jwt_token,
-            },
-        })
+        }, this._generateAxiosHeaderConfig())
             .then(function (resp) {
             var id = resp.data.id;
             _this.userSubscriptions = _this.userSubscriptions.filter(function (us) { return us.id !== id; });
@@ -298,11 +308,7 @@ var Notification = /** @class */ (function () {
             .post("/setTagsUserEmailNotifications", {
             id: id,
             tags: tags,
-        }, {
-            headers: {
-                Authorization: "Bearer " + session.jwt_token,
-            },
-        })
+        }, this._generateAxiosHeaderConfig())
             .then(function (resp) {
             _this.userEmailNotification = resp.data;
             return resp.data;
@@ -325,11 +331,7 @@ var Notification = /** @class */ (function () {
             .post("/setTagsUserWebPushNotifications", {
             id: id,
             tags: tags,
-        }, {
-            headers: {
-                Authorization: "Bearer " + session.jwt_token,
-            },
-        })
+        }, this._generateAxiosHeaderConfig())
             .then(function (resp) {
             var id = resp.data.id;
             _this.userSubscriptions = _this.userSubscriptions.filter(function (us) { return us.id !== id; });
@@ -355,11 +357,7 @@ var Notification = /** @class */ (function () {
             .post("/setTagsUserEmailNotifications", {
             id: id,
             tags: tags,
-        }, {
-            headers: {
-                Authorization: "Bearer " + session.jwt_token,
-            },
-        })
+        }, this._generateAxiosHeaderConfig())
             .then(function (resp) {
             _this.userEmailNotification = resp.data;
             return resp.data;
@@ -382,11 +380,7 @@ var Notification = /** @class */ (function () {
             .post("/setTagsUserWebPushNotifications", {
             id: id,
             tags: tags,
-        }, {
-            headers: {
-                Authorization: "Bearer " + session.jwt_token,
-            },
-        })
+        }, this._generateAxiosHeaderConfig())
             .then(function (resp) {
             var id = resp.data.id;
             _this.userSubscriptions = _this.userSubscriptions.filter(function (us) { return us.id !== id; });
@@ -412,11 +406,7 @@ var Notification = /** @class */ (function () {
             .post("/setTagsUserEmailNotifications", {
             id: id,
             tags: tags,
-        }, {
-            headers: {
-                Authorization: "Bearer " + session.jwt_token,
-            },
-        })
+        }, this._generateAxiosHeaderConfig())
             .then(function (resp) {
             _this.userEmailNotification = resp.data;
             return resp.data;

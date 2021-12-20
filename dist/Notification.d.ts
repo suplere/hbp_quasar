@@ -14,11 +14,13 @@ export default class Notification {
     private userSubscriptions;
     private activeSubscription;
     constructor(config: types.NotificationConfig, session: UserSession);
+    private generateApplicationIdHeader;
     private getSubscription;
     getCurrentSubscription(): PushSubscription | null;
     isReadyForWebPush(): boolean;
     getEnvironment(): types.EnvironmentInfo;
     private _generateHeaders;
+    private _generateAxiosHeaderConfig;
     getUserEmailNotification(): types.UserEmail | null;
     getUserSubscription(): types.UserSubscription | null;
     getEmailTags(): types.Tags | null;

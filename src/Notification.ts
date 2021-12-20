@@ -1,6 +1,6 @@
 // Class for management notification settings - email + webpush
 
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { EnvironmentInfoHelper } from './EnvironmentInfoHelper'
 import * as types from "./types";
 import UserSession from "./UserSession";
@@ -50,6 +50,16 @@ export default class Notification {
     this.getUserNotifications();
   }
 
+  private generateApplicationIdHeader(): null | types.Headers {
+    if (this.appId) {
+      return {
+        ApplicationId: `${this.appId}`,
+      };
+    } else {
+      return null;
+    }
+  }
+
   private async getSubscription(): Promise<null | PushSubscription> {
     if (!("serviceWorker" in navigator)) return null;
 
@@ -80,7 +90,7 @@ export default class Notification {
   }
 
   public isReadyForWebPush(): boolean {
-    return this.currentSubscription ? true : false
+    return this.currentSubscription ? true : false;
   }
 
   public getEnvironment(): types.EnvironmentInfo {
@@ -91,6 +101,24 @@ export default class Notification {
     return {
       Authorization: `Bearer ${this.currentSession.getSession()?.jwt_token}`,
     };
+  }
+
+  private _generateAxiosHeaderConfig(): null | AxiosRequestConfig {
+    const token = this.currentSession.getSession()?.jwt_token;
+    if (token) {
+      return {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          ...this.generateApplicationIdHeader(),
+        },
+      };
+    } else {
+      return {
+        headers: {
+          ...this.generateApplicationIdHeader(),
+        },
+      };
+    }
   }
 
   public getUserEmailNotification(): types.UserEmail | null {
@@ -119,13 +147,8 @@ export default class Notification {
       return null;
     }
     return this.httpClient
-      .get("/getUserNotifications", {
-        headers: {
-          Authorization: `Bearer ${
-            this.currentSession.getSession()?.jwt_token
-          }`,
-        },
-      })
+      .get("/getUserNotifications",
+      this._generateAxiosHeaderConfig())
       .then((resp) => {
         this.userEmailNotification = resp.data.users_email;
         this.userSubscriptions = resp.data.webpushes;
@@ -157,11 +180,7 @@ export default class Notification {
           enviromentInfo: this.environment,
           tags,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${session.jwt_token}`,
-          },
-        }
+        this._generateAxiosHeaderConfig()
       )
       .then((resp) => {
         this.activeSubscription = resp.data;
@@ -185,11 +204,7 @@ export default class Notification {
           email: user.email,
           tags,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${session.jwt_token}`,
-          },
-        }
+        this._generateAxiosHeaderConfig()
       )
       .then((resp) => {
         this.userEmailNotification = resp.data;
@@ -211,15 +226,13 @@ export default class Notification {
         {
           id,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${session.jwt_token}`,
-          },
-        }
+        this._generateAxiosHeaderConfig()
       )
       .then((resp) => {
-        const id = resp.data.id
-        this.userSubscriptions = this.userSubscriptions.filter(us => us.id !== id)
+        const id = resp.data.id;
+        this.userSubscriptions = this.userSubscriptions.filter(
+          (us) => us.id !== id
+        );
         this.activeSubscription = null;
         return null;
       });
@@ -239,11 +252,7 @@ export default class Notification {
         {
           id,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${session.jwt_token}`,
-          },
-        }
+        this._generateAxiosHeaderConfig()
       )
       .then(() => {
         this.userEmailNotification = null;
@@ -267,11 +276,7 @@ export default class Notification {
           id,
           tags,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${session.jwt_token}`,
-          },
-        }
+        this._generateAxiosHeaderConfig()
       )
       .then((resp) => {
         const id = resp.data.id;
@@ -300,11 +305,7 @@ export default class Notification {
           id,
           tags,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${session.jwt_token}`,
-          },
-        }
+        this._generateAxiosHeaderConfig()
       )
       .then((resp) => {
         this.userEmailNotification = resp.data;
@@ -329,11 +330,7 @@ export default class Notification {
           id,
           tags,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${session.jwt_token}`,
-          },
-        }
+        this._generateAxiosHeaderConfig()
       )
       .then((resp) => {
         const id = resp.data.id;
@@ -363,11 +360,7 @@ export default class Notification {
           id,
           tags,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${session.jwt_token}`,
-          },
-        }
+        this._generateAxiosHeaderConfig()
       )
       .then((resp) => {
         this.userEmailNotification = resp.data;
@@ -392,11 +385,7 @@ export default class Notification {
           id,
           tags,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${session.jwt_token}`,
-          },
-        }
+        this._generateAxiosHeaderConfig()
       )
       .then((resp) => {
         const id = resp.data.id;
@@ -426,11 +415,7 @@ export default class Notification {
           id,
           tags,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${session.jwt_token}`,
-          },
-        }
+        this._generateAxiosHeaderConfig()
       )
       .then((resp) => {
         this.userEmailNotification = resp.data;
