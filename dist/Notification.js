@@ -147,6 +147,11 @@ var Notification = /** @class */ (function () {
             };
         }
     };
+    Notification.prototype.generateVAPIDKeys = function () {
+        return this.httpClient
+            .get("/generateVAPIDKeys", this._generateAxiosHeaderConfig());
+    };
+    ;
     Notification.prototype.getUserEmailNotification = function () {
         return this.userEmailNotification;
     };

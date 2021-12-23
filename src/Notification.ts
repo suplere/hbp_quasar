@@ -121,6 +121,11 @@ export default class Notification {
     }
   }
 
+  public generateVAPIDKeys() {
+    return this.httpClient
+      .get("/generateVAPIDKeys", this._generateAxiosHeaderConfig())
+  };
+
   public getUserEmailNotification(): types.UserEmail | null {
     return this.userEmailNotification;
   }
@@ -147,8 +152,7 @@ export default class Notification {
       return null;
     }
     return this.httpClient
-      .get("/getUserNotifications",
-      this._generateAxiosHeaderConfig())
+      .get("/getUserNotifications", this._generateAxiosHeaderConfig())
       .then((resp) => {
         this.userEmailNotification = resp.data.users_email;
         this.userSubscriptions = resp.data.webpushes;

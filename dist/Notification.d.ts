@@ -21,6 +21,7 @@ export default class Notification {
     getEnvironment(): types.EnvironmentInfo;
     private _generateHeaders;
     private _generateAxiosHeaderConfig;
+    generateVAPIDKeys(): Promise<import("axios").AxiosResponse<any, any>>;
     getUserEmailNotification(): types.UserEmail | null;
     getUserSubscription(): types.UserSubscription | null;
     getEmailTags(): types.Tags | null;
