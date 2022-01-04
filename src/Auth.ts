@@ -742,7 +742,7 @@ export default class Auth {
       }, this.sampleRate);
 
       this.authStateChanged(true);
-    } else this.authStateChanged(true);
+    }
     this.loading = false;
   }
 }
