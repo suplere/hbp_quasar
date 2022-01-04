@@ -814,6 +814,8 @@ var Auth = /** @class */ (function () {
                             }, this.sampleRate);
                             this.authStateChanged(true);
                         }
+                        else
+                            this.authStateChanged(true);
                         this.loading = false;
                         return [2 /*return*/];
                 }
